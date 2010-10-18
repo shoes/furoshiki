@@ -1,0 +1,61 @@
+= furoshiki
+
+風呂敷 (Furoshiki) is a simple way to package your Ruby applications for distribution on Windows, Linux, and OSX. A 風呂敷 is "a type of traditional Japanese wrapping cloth that were frequently used to transport clothes, gifts, or other goods."
+
+In our case, you can distribute your Ruby script with 風呂敷 by adding this to your Rakefile:
+
+  require 'furoshiki'
+
+  PackageTask.new
+
+If you'd like to set a different entry point, just configure your task:
+
+PackageTask.new do
+  entry "SomeClass#some_method"
+end
+
+and it'll do the right thing.
+
+== ALPHA WARNING
+
+This is all super alpha, and is subject to change at any time.
+
+== Inspiration
+
+The inspiriation for 風呂敷 came from Shoes[http://shoesrb.com]. One of Shoes' best features is packaging up scripts made with Shoes into their own executables. You could take any little script and make a .app, .exe, or .run file. However, this code was really complicated, and made Shoes hard to maintain. It was often the source of people's problems when trying to build Shoes of their own. So, while working on Shoes 4, I decided to see if anyone else was doing anything similar. I came across the .app for libgosu[http://code.google.com/p/gosu/wiki/RubyPackagingOnOsx], which was doing a similar thing. After emailing Julian, I decided that if this was useful for Shoes, and useful for libgosu, it'd probably be useful for other projects, too. So I've set out to figure out the Shoes packager, play with the libgosu versions, and come up with an easy way for you to bundle and distribute GUI programs written in Ruby.
+
+== Helping out with 風呂敷
+
+風呂敷uses the following 'stack':
+
+* Ruby 1.9.2
+* Bundler
+* git flow
+
+I personally use rvm, so I also have a .rvmrc set up. It'll switch to the right Ruby when you cd into the directory, so you might see something about needing to create a gemset. If you use rvm, it's probably a good idea:
+
+  $ rvm gemset create furoshiki
+
+Since you've made a new gemset, you'll probably need to install bundler:
+
+  $ gem install bundler
+
+and then you should be good to go. Currently, we have no dependancies. I'm sure that'll change. :)
+
+=== A note about git flow
+
+git-flow[http://github.com/nvie/gitflow] is totally awesome, so I use it to manage my branches. I'm just using the default settings. What this means for you: you can use git-flow, but if you don't, master is just for stable stuff, develop is where all the action is happening. Patches and pull requests should be created off of develop.
+
+=== Note on Patches/Pull Requests
+ 
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add tests for it. This is important so I don't break it in a
+  future version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
+* Send me a pull request. Bonus points for topic branches.
+
+== Copyright
+
+Copyright (c) 2010 Steve Klabnik. See LICENSE for details.
