@@ -6,13 +6,13 @@ In our case, you can distribute your Ruby script with 風呂敷 by adding this t
 
   require 'furoshiki'
 
-  PackageTask.new
+  Furoshiki::RakeTask.new
 
 If you'd like to set a different entry point, just configure your task:
 
-PackageTask.new do
-  entry "SomeClass#some_method"
-end
+  Furoshiki::RakeTask.new do
+    entry "SomeClass#some_method"
+  end
 
 and it'll do the right thing.
 

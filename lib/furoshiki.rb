@@ -1,5 +1,1 @@
-module Furoshiki
-  def self.hello
-    "hello"
-  end
-end
+require_relative 'furoshiki/rake_task'
