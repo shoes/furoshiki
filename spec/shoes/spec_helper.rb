@@ -1,13 +1,9 @@
-require 'simplecov'
-SimpleCov.start
-
 SHOESSPEC_ROOT = File.expand_path('..', __FILE__)
 $LOAD_PATH << File.join('../lib', SHOESSPEC_ROOT)
 
 require 'rspec'
 require 'pathname'
-require 'pry'
-require 'shoes'
+require 'shoes/package'
 
 module PackageHelpers
   # need these values from a context block, so let doesn't work
