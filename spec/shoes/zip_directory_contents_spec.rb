@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'support/shared_zip'
 require 'fileutils'
-require 'shoes/package/zip_directory_contents'
+require 'furoshiki/shoes/package/zip_directory_contents'
 
 describe Shoes::Package::ZipDirectoryContents do
   subject { Shoes::Package::ZipDirectoryContents.new input_dir, output_file }

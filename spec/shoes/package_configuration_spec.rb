@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'shoes/package/configuration'
+require 'furoshiki/shoes/package/configuration'
 
 describe Shoes::Package::Configuration do
   context "defaults" do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'pathname'
-require 'shoes/swt/package/jar'
+require 'furoshiki/shoes/swt/package/jar'
 
 include PackageHelpers
 

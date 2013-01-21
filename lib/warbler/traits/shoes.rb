@@ -1,4 +1,4 @@
-require 'shoes/package/configuration'
+require 'furoshiki/shoes/package/configuration'
 
 module Warbler
   module Traits

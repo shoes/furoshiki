@@ -3,7 +3,7 @@ $LOAD_PATH << File.join('../lib', SHOESSPEC_ROOT)
 
 require 'rspec'
 require 'pathname'
-require 'shoes/package'
+require 'furoshiki/shoes'
 
 module PackageHelpers
   # need these values from a context block, so let doesn't work
