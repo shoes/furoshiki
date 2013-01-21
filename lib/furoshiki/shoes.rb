@@ -1,1 +1,1 @@
-require 'furoshiki/shoes/package'
+require 'furoshiki/shoes'

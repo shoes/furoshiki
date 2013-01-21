@@ -1,5 +1,5 @@
-require 'furoshiki/shoes/package/configuration'
-require 'furoshiki/shoes/package/zip_directory'
+require 'furoshiki/shoes/configuration'
+require 'furoshiki/shoes/zip_directory'
 require 'furoshiki/shoes/swt/package/jar'
 require 'fileutils'
 require 'plist'
