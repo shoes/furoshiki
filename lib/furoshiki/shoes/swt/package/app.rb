@@ -15,7 +15,7 @@ module Shoes
           @config = config
           @default_package_dir = working_dir.join('pkg')
           @package_dir = default_package_dir
-          root = Pathname.new(__FILE__).join('../../../../..')
+          root = Pathname.new(__FILE__).join('../../../../../..')
           @default_template_path = root.join('static/shoes-app-template.zip')
           @template_path = default_template_path
           @tmp = @package_dir.join('tmp')

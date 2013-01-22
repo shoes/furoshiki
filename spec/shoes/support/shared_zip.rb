@@ -1,7 +1,7 @@
 include ZipHelpers
 
 shared_context 'package' do
-  let(:app_dir) { spec_dir.join 'test_app' }
+  let(:app_dir) { spec_dir.join 'shoes/test_app' }
   let(:output_dir) { app_dir.join 'pkg' }
 end
 

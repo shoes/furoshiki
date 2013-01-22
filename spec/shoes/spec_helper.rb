@@ -8,11 +8,11 @@ require 'furoshiki/shoes'
 module PackageHelpers
   # need these values from a context block, so let doesn't work
   def spec_dir
-    Pathname.new(__FILE__).parent
+    Pathname.new(__FILE__).join('../..').cleanpath
   end
 
   def input_dir
-    spec_dir.join 'support', 'zip'
+    spec_dir.join 'shoes', 'support', 'zip'
   end
 end
 
