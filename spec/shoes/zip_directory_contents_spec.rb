@@ -1,5 +1,5 @@
-require 'spec_helper'
-require 'support/shared_zip'
+require_relative 'spec_helper'
+require_relative 'support/shared_zip'
 require 'fileutils'
 require 'furoshiki/shoes/zip_directory_contents'
 
