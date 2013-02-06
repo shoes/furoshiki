@@ -129,7 +129,7 @@ module Shoes
         end
 
         def extract_template
-          raise IOError, "Couldn't find app template at #{template_path}." unless template_path.exist?
+          raise IOError, "Couldn't find app template at #{template_path}." unless template_path.size?
           extracted_app = nil
           Zip::ZipFile.new(template_path).each do |entry|
             # Fragile hack
