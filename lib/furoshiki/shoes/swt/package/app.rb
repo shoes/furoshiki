@@ -3,6 +3,7 @@ require 'furoshiki/shoes/zip_directory'
 require 'furoshiki/shoes/swt/package/jar'
 require 'fileutils'
 require 'plist'
+require 'open-uri'
 
 module Shoes
   module Swt
@@ -17,7 +18,7 @@ module Shoes
           @cache_dir = Pathname.new(home).join('.furoshiki', 'cache')
           @default_package_dir = working_dir.join('pkg')
           @package_dir = default_package_dir
-          @default_template_path = cache_dir.join('shoes-app-template.zip')
+          @default_template_path = cache_dir.join(template_filename)
           @template_path = default_template_path
           @tmp = @package_dir.join('tmp')
         end
@@ -44,6 +45,7 @@ module Shoes
         def package
           remove_tmp
           create_tmp
+          cache_template
           extract_template
           inject_icon
           inject_config
@@ -63,6 +65,42 @@ module Shoes
 
         def remove_tmp
           tmp.rmtree if tmp.exist?
+        end
+
+        def cache_template
+          cache_dir.mkpath unless cache_dir.exist?
+          download_template unless template_path.exist?
+        end
+
+        def template_basename
+          'shoes-app-template'
+        end
+
+        def template_extension
+          '.zip'
+        end
+
+        def template_filename
+          "#{template_basename}#{template_extension}"
+        end
+
+        def latest_template_version
+          '0.0.1'
+        end
+
+        def download_template
+          puts "downloading #{remote_template_url} to #{template_path}..."
+          open(template_path, 'wb') do |template|
+            template.print open(remote_template_url, 'rb').read
+          end
+        end
+
+        def downloads_url
+          "http://shoesrb.com/downloads"
+        end
+
+        def remote_template_url
+          "#{downloads_url}/#{template_basename}-#{latest_template_version}#{template_extension}"
         end
 
         def move_to_package_dir(path)

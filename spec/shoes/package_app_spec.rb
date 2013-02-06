@@ -32,15 +32,18 @@ describe Shoes::Swt::Package::App do
   end
 
   context "default" do
-    its(:cache_dir) { should eq(Pathname.new(SHOESSPEC_ROOT).join('.furoshiki', 'cache')) }
+    let(:cache_dir) { Pathname.new(SHOESSPEC_ROOT).join('.furoshiki', 'cache') }
+    its(:cache_dir) { should eq(cache_dir) }
+
     it "sets package dir to {pwd}/pkg" do
       Dir.chdir app_dir do
         subject.default_package_dir.should eq(app_dir.join 'pkg')
       end
     end
 
-    its(:template_path) { should eq(spec_dir.parent.join('static/shoes-app-template.zip')) }
+    its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
     its(:template_path) { should exist }
+    its(:remote_template_url) { should eq('http://shoesrb.com/downloads/shoes-app-template-0.0.1.zip') }
   end
 
   context "when creating a .app" do
