@@ -1,6 +1,10 @@
 SHOESSPEC_ROOT = File.expand_path('..', __FILE__)
 $LOAD_PATH << File.join('../lib', SHOESSPEC_ROOT)
 
+# Packaging caches files in $HOME/.furoshiki/cache by default.
+# For testing, we override $HOME using $FUROSHIKI_HOME
+ENV['FUROSHIKI_HOME'] = SHOESSPEC_ROOT
+
 require 'rspec'
 require 'pathname'
 require 'furoshiki/shoes'

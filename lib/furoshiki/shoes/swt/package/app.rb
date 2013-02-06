@@ -13,10 +13,11 @@ module Shoes
         # @param [Shoes::Package::Configuration] config user configuration
         def initialize(config)
           @config = config
+          home = ENV['FUROSHIKI_HOME'] || Dir.home
+          @cache_dir = Pathname.new(home).join('.furoshiki', 'cache')
           @default_package_dir = working_dir.join('pkg')
           @package_dir = default_package_dir
-          root = Pathname.new(__FILE__).join('../../../../../..')
-          @default_template_path = root.join('static/shoes-app-template.zip')
+          @default_template_path = cache_dir.join('shoes-app-template.zip')
           @template_path = default_template_path
           @tmp = @package_dir.join('tmp')
         end
@@ -32,6 +33,9 @@ module Shoes
 
         # @return [Pathname] path to .app template
         attr_accessor :template_path
+
+        # @return [Pathname] cache directory
+        attr_reader :cache_dir
 
         attr_reader :config
 

@@ -16,8 +16,24 @@ describe Shoes::Swt::Package::App do
   let(:jar) { output_file.join('Contents/Java/sweet-nebulae.jar') }
   subject { Shoes::Swt::Package::App.new config }
 
+  # $FUROSHIKI_HOME is set in spec_helper.rb for testing purposes,
+  # but should default to $HOME
+  context "when not setting $FUROSHIKI_HOME" do
+    before do
+      @old_furoshiki_home = ENV['FUROSHIKI_HOME']
+      ENV['FUROSHIKI_HOME'] = nil
+    end
+
+    its(:cache_dir) { should eq(Pathname.new(Dir.home).join('.furoshiki', 'cache')) }
+
+    after do
+      ENV['FUROSHIKI_HOME'] = @old_furoshiki_home
+    end
+  end
+
   context "default" do
-    it "package dir is {pwd}/pkg" do
+    its(:cache_dir) { should eq(Pathname.new(SHOESSPEC_ROOT).join('.furoshiki', 'cache')) }
+    it "sets package dir to {pwd}/pkg" do
       Dir.chdir app_dir do
         subject.default_package_dir.should eq(app_dir.join 'pkg')
       end
