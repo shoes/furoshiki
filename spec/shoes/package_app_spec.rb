@@ -42,7 +42,6 @@ describe Shoes::Swt::Package::App do
     end
 
     its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
-    its(:template_path) { should exist }
     its(:remote_template_url) { should eq('http://shoesrb.com/downloads/shoes-app-template-0.0.1.zip') }
   end
 
@@ -54,6 +53,8 @@ describe Shoes::Swt::Package::App do
         subject.package
       end
     end
+
+    its(:template_path) { should exist }
 
     it "creates a .app" do
       output_file.should exist
