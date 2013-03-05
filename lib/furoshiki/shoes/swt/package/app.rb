@@ -1,9 +1,11 @@
+require 'furoshiki/exceptions'
 require 'furoshiki/shoes/configuration'
 require 'furoshiki/shoes/zip_directory'
 require 'furoshiki/shoes/swt/package/jar'
 require 'fileutils'
 require 'plist'
 require 'open-uri'
+require 'net/http'
 
 module Shoes
   module Swt
@@ -69,7 +71,7 @@ module Shoes
 
         def cache_template
           cache_dir.mkpath unless cache_dir.exist?
-          download_template unless template_path.exist?
+          download_template unless template_path.size?
         end
 
         def template_basename
@@ -89,9 +91,36 @@ module Shoes
         end
 
         def download_template
-          puts "downloading #{remote_template_url} to #{template_path}..."
-          open(template_path, 'wb') do |template|
-            template.print open(remote_template_url, 'rb').read
+          download remote_template_url, template_path
+        end
+
+        def download(remote_url, local_path)
+          download_following_redirects remote_url, local_path
+        end
+
+        def download_following_redirects(remote_url, local_path, redirect_limit = 5)
+          raise Furoshiki::DownloadError, "Too many redirects" if redirect_limit == 0
+
+          uri = URI(remote_url)
+          Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+            request = Net::HTTP::Get.new(uri.request_uri)
+            http.request request do |response|
+              case response
+              when Net::HTTPSuccess then
+                warn "Downloading #{remote_url} to #{local_path}"
+                open(local_path, 'wb') do |file|
+                  response.read_body do |chunk|
+                    file.write chunk
+                  end
+                end
+              when Net::HTTPRedirection then
+                location = response['location']
+                warn "Redirected to #{location}"
+                download_following_redirects(location, local_path, redirect_limit - 1)
+              else
+                raise Furoshiki::DownloadError, "Couldn't download app template at #{remote_url}. #{response.value}"
+              end
+            end
           end
         end
 
