@@ -5,7 +5,7 @@ gem "plist"
 gem "warbler"
 
 # Only for packaging Shoes apps (there is no GUI)
-gem "shoes", :github => "shoes/shoes4"
+gem "shoes"#, :github => "shoes/shoes4"
 
 group :test, :development do
   gem "rspec", "~> 2.12"

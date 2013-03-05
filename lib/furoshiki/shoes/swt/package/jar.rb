@@ -20,7 +20,8 @@ module Shoes
                 children = Dir.glob("#{path}/**/*") if File.directory?(path)
                 [path, *children]
               end.flatten
-              config.excludes.add FileList.new(ignore).pathmap(config.pathmaps.application.first)
+              config.excludes.add FileList.new(ignore.flatten).pathmap(config.pathmaps.application.first)
+              config.gem_excludes += [/^samples/, /^examples/, /^test/, /^spec/]
             end
             @config.extend ShoesWarblerConfig
             @config.run = @shoes_config.run.split(/\s/).first
