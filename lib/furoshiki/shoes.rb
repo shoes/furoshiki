@@ -1,3 +1,6 @@
+require 'furoshiki/shoes/swt_jar'
+require 'furoshiki/shoes/swt_app'
+
 module Furoshiki
   module Shoes
     def self.new(backend, wrapper, config)

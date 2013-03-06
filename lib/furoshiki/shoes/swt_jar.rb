@@ -1,12 +1,13 @@
+require 'furoshiki/shoes/configuration'
 require 'warbler'
 require 'warbler/traits/shoes'
 
 module Furoshiki
   module Shoes
     class SwtJar
-      # @param [Shoes::Package::Configuration] config user configuration
+      # @param [Furoshiki::Shoes::Configuration] config user configuration
       def initialize(config = nil)
-        @shoes_config = config || ::Shoes::Package::Configuration.load
+        @shoes_config = config || Furoshiki::Shoes::Configuration.load
         Dir.chdir working_dir do
           @config = Warbler::Config.new do |config|
             config.jar_name = @shoes_config.shortname
