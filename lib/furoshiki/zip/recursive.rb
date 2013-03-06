@@ -1,28 +1,28 @@
 require 'pathname'
 require 'zip/zip'
 
-module Shoes
-  module Package
+module Furoshiki
+  module Zip
     # Adapted from rubyzip's sample, ZipFileGenerator
     #
     # This is a utility class that uses rubyzip to recursively
     # generate a zip file containing the given entries and all of
     # their children.
     #
-    # Best used through frontend classes ZipDirectory or
-    # ZipDirectoryContents
+    # Best used through frontend classes Furoshiki::Zip::Directory or
+    # Furoshiki::Zip::DirectoryContents
     #
     # @example
     # To zip the directory "/tmp/input" so that unarchiving
     # gives you a single directory "input":
     # 
-    #   zip = RecursiveZip
+    #   zip = Furoshiki::Zip::Recursive
     #   entries = Pathname.new("/tmp/input").entries
     #   zip_prefix = ''
     #   disk_prefix = '/tmp'
     #   output_file = '/tmp/out.zip'
     #   zf.write(entries, disk_prefix, zip_prefix, output_file)
-    class RecursiveZip
+    class Recursive
       def initialize(output_file)
         @output_file = output_file.to_s
       end
@@ -32,7 +32,7 @@ module Shoes
       # @param [Pathname] zip_prefix a path prefix to add within archive
       # @param [Pathname] output_file the location of the output archive
       def write(entries, disk_prefix, zip_prefix)
-        io = Zip::ZipFile.open(@output_file, Zip::ZipFile::CREATE); 
+        io = ::Zip::ZipFile.open(@output_file, ::Zip::ZipFile::CREATE); 
         write_entries(entries, disk_prefix, zip_prefix, io)
         io.close();
       end

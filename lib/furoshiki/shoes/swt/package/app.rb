@@ -1,6 +1,6 @@
 require 'furoshiki/exceptions'
 require 'furoshiki/shoes/configuration'
-require 'furoshiki/shoes/zip_directory'
+require 'furoshiki/zip/directory'
 require 'furoshiki/shoes/swt/package/jar'
 require 'fileutils'
 require 'plist'

@@ -1,10 +1,10 @@
 require_relative 'spec_helper'
 require_relative 'support/shared_zip'
 require 'fileutils'
-require 'furoshiki/shoes/zip_directory_contents'
+require 'furoshiki/zip'
 
-describe Shoes::Package::ZipDirectoryContents do
-  subject { Shoes::Package::ZipDirectoryContents.new input_dir, output_file }
+describe Furoshiki::Zip::DirectoryContents do
+  subject { Furoshiki::Zip::DirectoryContents.new input_dir, output_file }
 
   context "output file" do
     include_context 'zip'

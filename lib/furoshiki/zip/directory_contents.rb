@@ -1,15 +1,15 @@
-require 'furoshiki/shoes/recursive_zip'
+require 'furoshiki/zip/recursive'
 
-module Shoes
-  module Package
-    class ZipDirectoryContents
+module Furoshiki
+  module Zip
+    class DirectoryContents
       # @param [#to_s] input_dir the directory to zip
       # @param [#to_s] output_file the location of the output archive
       def initialize(input_dir, output_file)
         @input_dir = Pathname.new(input_dir)
-        @zip = RecursiveZip.new(output_file)
+        @zip = Recursive.new(output_file)
       end
-      
+
       # Zip the contents of the input directory, without the root.
       def write
         entries = @input_dir.children(false)
