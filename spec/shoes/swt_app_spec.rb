@@ -1,21 +1,21 @@
 require 'spec_helper'
 require_relative 'spec_helper'
 require 'pathname'
-require 'furoshiki/shoes/swt/package/app'
+require 'furoshiki/shoes/swt_app'
 
 include PackageHelpers
 
-describe Shoes::Swt::Package::App do
+describe Furoshiki::Shoes::SwtApp do
   include_context 'config'
   include_context 'package'
 
   let(:app_name) { 'Sugar Clouds.app' }
   let(:output_file) { output_dir.join app_name }
-  let(:config) { Shoes::Package::Configuration.load config_filename}
+  let(:config) { Furoshiki::Shoes::Configuration.load config_filename}
   let(:launcher) { output_file.join('Contents/MacOS/JavaAppLauncher') }
   let(:icon)  { output_file.join('Contents/Resources/boots.icns') }
   let(:jar) { output_file.join('Contents/Java/sweet-nebulae.jar') }
-  subject { Shoes::Swt::Package::App.new config }
+  subject { Furoshiki::Shoes::SwtApp.new config }
 
   # $FUROSHIKI_HOME is set in spec_helper.rb for testing purposes,
   # but should default to $HOME

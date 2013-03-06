@@ -1,8 +1,8 @@
 require 'pathname'
 require 'yaml'
 
-module Shoes
-  module Package
+module Furoshiki
+  module Shoes
     # Configuration for Shoes packagers.
     #
     # @example

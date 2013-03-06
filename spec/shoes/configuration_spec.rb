@@ -1,9 +1,9 @@
 require_relative 'spec_helper'
 require 'furoshiki/shoes/configuration'
 
-describe Shoes::Package::Configuration do
+describe Furoshiki::Shoes::Configuration do
   context "defaults" do
-    subject { Shoes::Package::Configuration.new }
+    subject { Furoshiki::Shoes::Configuration.new }
 
     its(:name) { should eq('Shoes App') }
     its(:shortname) { should eq('shoesapp') }
@@ -41,14 +41,14 @@ describe Shoes::Package::Configuration do
 
     describe "#to_hash" do
       it "round-trips" do
-        Shoes::Package::Configuration.new(subject.to_hash).should eq(subject)
+        Furoshiki::Shoes::Configuration.new(subject.to_hash).should eq(subject)
       end
     end
   end
 
   context "with options" do
     include_context 'config'
-    subject { Shoes::Package::Configuration.load(config_filename) }
+    subject { Furoshiki::Shoes::Configuration.load(config_filename) }
 
     its(:name) { should eq('Sugar Clouds') }
     its(:shortname) { should eq('sweet-nebulae') }
@@ -91,7 +91,7 @@ describe Shoes::Package::Configuration do
 
   context "with name, but without explicit shortname" do
     let(:options) { {:name => "Sugar Clouds"} }
-    subject { Shoes::Package::Configuration.new options }
+    subject { Furoshiki::Shoes::Configuration.new options }
 
     its(:name) { should eq("Sugar Clouds") }
     its(:shortname) { should eq("sugarclouds") }
@@ -103,14 +103,14 @@ describe Shoes::Package::Configuration do
     context "without a path" do
       it "looks for 'app.yaml' in current directory" do
         Dir.chdir config_filename.parent do
-          config = Shoes::Package::Configuration.load
+          config = Furoshiki::Shoes::Configuration.load
           config.shortname.should eq('sweet-nebulae')
         end
       end
 
       it "blows up if it can't find the file" do
         Dir.chdir File.dirname(__FILE__) do
-          lambda { config = Shoes::Package::Configuration.load }.should raise_error
+          lambda { config = Furoshiki::Shoes::Configuration.load }.should raise_error
         end
       end
     end
@@ -118,7 +118,7 @@ describe Shoes::Package::Configuration do
     shared_examples "config with path" do
       it "finds the config" do
         Dir.chdir File.dirname(__FILE__) do
-          config = Shoes::Package::Configuration.load(path)
+          config = Furoshiki::Shoes::Configuration.load(path)
           config.shortname.should eq('sweet-nebulae')
         end
       end
@@ -141,7 +141,7 @@ describe Shoes::Package::Configuration do
 
     context "with a path that exists, but no 'app.yaml'" do
       let(:path) { config_filename.parent.join('bin/hello_world') }
-      subject { Shoes::Package::Configuration.load(path) }
+      subject { Furoshiki::Shoes::Configuration.load(path) }
 
       its(:name) { should eq('hello_world') }
       its(:shortname) { should eq('hello_world') }
@@ -149,7 +149,7 @@ describe Shoes::Package::Configuration do
 
     context "when the file doesn't exist" do
       it "blows up" do
-        lambda { Shoes::Package::Configuration.load('some/bogus/path') }.should raise_error
+        lambda { Furoshiki::Shoes::Configuration.load('some/bogus/path') }.should raise_error
       end
     end
   end

@@ -28,5 +28,5 @@ module ZipHelpers
 end
 
 spec_root = File.dirname(__FILE__)
-Dir["#{spec_root}/support/**/*.rb"].each { |f| puts "requiring f"; require f }
+Dir["#{spec_root}/support/**/*.rb"].each { |f| require f }
 

@@ -1,10 +1,10 @@
 require_relative 'spec_helper'
 require 'pathname'
-require 'furoshiki/shoes/swt/package/jar'
+require 'furoshiki/shoes/swt_jar'
 
 include PackageHelpers
 
-describe Shoes::Swt::Package::Jar do
+describe Furoshiki::Shoes::SwtJar do
   include_context 'config'
   include_context 'package'
 
@@ -19,8 +19,8 @@ describe Shoes::Swt::Package::Jar do
 
     let(:jar_name) { 'sweet-nebulae.jar' }
     let(:output_file) { Pathname.new(output_dir.join jar_name) }
-    let(:config) { Shoes::Package::Configuration.load(config_filename) }
-    subject { Shoes::Swt::Package::Jar.new(config) }
+    let(:config) { Furoshiki::Shoes::Configuration.load(config_filename) }
+    subject { Furoshiki::Shoes::SwtJar.new(config) }
 
     it "creates a .jar" do
       output_file.should exist
