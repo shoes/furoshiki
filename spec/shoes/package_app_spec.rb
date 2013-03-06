@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative 'spec_helper'
 require 'pathname'
 require 'furoshiki/shoes/swt/package/app'

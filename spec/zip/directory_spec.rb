@@ -1,5 +1,4 @@
-require_relative 'spec_helper'
-require_relative 'support/shared_zip'
+require 'spec_helper'
 require 'fileutils'
 require 'furoshiki/zip'
 
