@@ -16,6 +16,21 @@ If you'd like to set a different entry point, just configure your task:
 
 and it'll do the right thing.
 
+== Packaging Shoes apps
+
+For the moment, packaging a Shoes app works differently (see ALPHA WARNING).
+
+To package a Shoes app, ignore the instructions above :)
+
+    path = 'path/to/your/shoes-app' # See Furoshiki::Shoes::Configuration
+    config = Furoshiki::Shoes::Configuration.load(path)
+    packager = Furoshiki::Shoes.new(:swt, :app, config)
+    packager.package
+
+Or use the shoes4 command line interface:
+
+    bin/shoes -p swt:app path/to/your/shoes-app
+
 == ALPHA WARNING
 
 This is all super alpha, and is subject to change at any time.
