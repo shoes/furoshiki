@@ -1,4 +1,5 @@
 require 'bundler'
+require 'rake/clean'
 Bundler::GemHelper.install_tasks
 
 @types = %w[rb]
@@ -16,4 +17,5 @@ namespace :whitespace do
     end
   end
 end
- 
+
+CLEAN.include('spec/shoes/.furoshiki', 'spec/shoes/sample_app')

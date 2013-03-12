@@ -17,5 +17,8 @@ tmtags
 coverage
 rdoc
 pkg
+.rvmrc
+Gemfile.lock
 
 ## PROJECT::SPECIFIC
+spec/shoes/.furoshiki
