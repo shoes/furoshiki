@@ -1,26 +1,17 @@
 = furoshiki
 
-風呂敷 (Furoshiki) is a simple way to package your Ruby applications for distribution on Windows, Linux, and OSX. A 風呂敷 is "a type of traditional Japanese wrapping cloth that were frequently used to transport clothes, gifts, or other goods."
+風呂敷 (Furoshiki) is a simple way to package your Ruby applications for
+distribution on Windows, Linux, and OSX. A 風呂敷 is "a type of traditional
+Japanese wrapping cloth that were frequently used to transport clothes, gifts,
+or other goods."
 
-In our case, you can distribute your Ruby script with 風呂敷 by adding this to your Rakefile:
+== ALPHA WARNING
 
-  require 'furoshiki'
-
-  Furoshiki::RakeTask.new
-
-If you'd like to set a different entry point, just configure your task:
-
-  Furoshiki::RakeTask.new do
-    entry "SomeClass#some_method"
-  end
-
-and it'll do the right thing.
+This is all super alpha, and is subject to change at any time.
 
 == Packaging Shoes apps
 
-For the moment, packaging a Shoes app works differently (see ALPHA WARNING).
-
-To package a Shoes app, ignore the instructions above :)
+For the moment, we only really package Shoes apps. See ALPHA WARNING above ;)
 
     path = 'path/to/your/shoes-app' # See Furoshiki::Shoes::Configuration
     config = Furoshiki::Shoes::Configuration.load(path)
@@ -31,35 +22,34 @@ Or use the shoes4 command line interface:
 
     bin/shoes -p swt:app path/to/your/shoes-app
 
-== ALPHA WARNING
-
-This is all super alpha, and is subject to change at any time.
+Eventually, we will be able to package non-Shoes apps too.
 
 == Inspiration
 
-The inspiriation for 風呂敷 came from Shoes[http://shoesrb.com]. One of Shoes' best features is packaging up scripts made with Shoes into their own executables. You could take any little script and make a .app, .exe, or .run file. However, this code was really complicated, and made Shoes hard to maintain. It was often the source of people's problems when trying to build Shoes of their own. So, while working on Shoes 4, I decided to see if anyone else was doing anything similar. I came across the .app for libgosu[http://code.google.com/p/gosu/wiki/RubyPackagingOnOsx], which was doing a similar thing. After emailing Julian, I decided that if this was useful for Shoes, and useful for libgosu, it'd probably be useful for other projects, too. So I've set out to figure out the Shoes packager, play with the libgosu versions, and come up with an easy way for you to bundle and distribute GUI programs written in Ruby.
+The inspiriation for 風呂敷 came from Shoes[http://shoesrb.com]. One of Shoes'
+best features is packaging up scripts made with Shoes into their own
+executables. You could take any little script and make a .app, .exe, or .run
+file. However, this code was really complicated, and made Shoes hard to
+maintain. It was often the source of people's problems when trying to build
+Shoes of their own. So, while working on Shoes 4, I decided to see if anyone
+else was doing anything similar. I came across the .app for
+libgosu[http://code.google.com/p/gosu/wiki/RubyPackagingOnOsx], which was doing
+a similar thing. After emailing Julian, I decided that if this was useful for
+Shoes, and useful for libgosu, it'd probably be useful for other projects, too.
+So I've set out to figure out the Shoes packager, play with the libgosu
+versions, and come up with an easy way for you to bundle and distribute GUI
+programs written in Ruby.
 
 == Helping out with 風呂敷
 
-風呂敷uses the following 'stack':
+It's easy! Just clone it down and do the usual bundler thing:
 
-* Ruby 1.9.2
-* Bundler
-* git flow
-
-I personally use rvm, so I also have a .rvmrc set up. It'll switch to the right Ruby when you cd into the directory, so you might see something about needing to create a gemset. If you use rvm, it's probably a good idea:
-
-  $ rvm gemset create furoshiki
-
-Since you've made a new gemset, you'll probably need to install bundler:
-
+  $ git clone https://github.com/shoes/furoshiki.git
+  $ cd furoshiki
   $ gem install bundler
+  $ bundle
 
-and then you should be good to go. Currently, we have no dependancies. I'm sure that'll change. :)
-
-=== A note about git flow
-
-git-flow[http://github.com/nvie/gitflow] is totally awesome, so I use it to manage my branches. I'm just using the default settings. What this means for you: you can use git-flow, but if you don't, master is just for stable stuff, develop is where all the action is happening. Patches and pull requests should be created off of develop.
+Easy-peasy.
 
 === Note on Patches/Pull Requests
  
