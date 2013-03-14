@@ -72,12 +72,14 @@ module Furoshiki
           file = dummy_file.new(options)
           dir = pathname.parent
         end
-        new YAML.load(file.read), dir 
+        config = YAML.load(file.read)
+        config[:working_dir] = dir
+        new(config)
       end
 
       # @param [Hash] config user options
       # @param [String] working_dir directory in which do packaging work
-      def initialize(config = {}, working_dir = Dir.pwd)
+      def initialize(config = {})
         defaults = {
           name: 'Shoes App',
           version: '0.0.0',
@@ -92,38 +94,65 @@ module Furoshiki
           dmg: {
             ds_store: 'path/to/default/.DS_Store',
             background: 'path/to/default/background.png'
-          }
+          },
+          working_dir: Dir.pwd
         }
 
         # Overwrite defaults with supplied config
         @config = config.inject(defaults) { |c, (k, v)| set_symbol_key c, k, v }
 
         # Ensure that we always have what we need
-        @config[:shortname] ||= @config[:name].downcase.gsub(/\W+/, '')
         [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
         @config[:gems] << 'shoes'
+        @config[:working_dir] = Pathname.new(@config[:working_dir])
 
-        # Define reader for each key
+        # Define reader for each key (#shortname defined below)
         metaclass = class << self; self; end
-        @config.keys.each do |k|
+        @config.keys.reject {|k| k == :shortname}.each do |k|
           metaclass.send(:define_method, k) do
             @config[k]
           end
         end
 
-        @working_dir = Pathname.new(working_dir)
+        @errors = []
       end
 
-      # @return [Pathname] the current working directory
-      attr_reader :working_dir
+      def shortname
+        @config[:shortname] || @config[:name].downcase.gsub(/\W+/, '')
+      end
 
       def to_hash
         @config
       end
 
+      def validate
+        unless @config[:run] && working_dir.join(@config[:run]).exist?
+          add_missing_file_error(@config[:run], "Run file")
+        end
+
+        if @config[:icons][:osx] && !working_dir.join(@config[:icons][:osx]).exist?
+          add_missing_file_error(@config[:icons][:osx], "OS X icon file")
+        end
+      end
+
+      def valid?
+        validate
+        return errors.empty?
+      end
+
+      def errors
+        @errors.dup
+      end
+
+      def error_message_list
+        @errors.map {|m| "  - #{m}"}.join("\n")
+      end
+
       def ==(other)
         super unless other.class == self.class && other.respond_to?(:to_hash)
-        @config == other.to_hash
+        @config == other.to_hash &&
+          working_dir == other.working_dir &&
+          errors == other.errors
       end
 
       private
@@ -140,6 +169,15 @@ module Furoshiki
           config[k.to_sym] = v
         end
         config
+      end
+
+      def add_error(message)
+        @errors << message
+      end
+
+      def add_missing_file_error(value, description)
+        message = "#{description} configured as '#{value}', but couldn't find file at #{working_dir.join(value.to_s)}"
+        add_error(message)
       end
     end
   end

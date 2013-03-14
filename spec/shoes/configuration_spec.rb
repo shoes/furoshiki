@@ -14,8 +14,10 @@ describe Furoshiki::Shoes::Configuration do
     its(:icons) { should be_an_instance_of(Hash) }
     its(:dmg) { should be_an_instance_of(Hash) }
     its(:run) { should be_nil }
+    its(:working_dir) { should eq(Pathname.new(Dir.pwd)) }
+    it { should_not be_valid } # no :run
 
-    describe "#icon" do
+    describe "#icons" do
       it 'osx is nil' do
         subject.icons[:osx].should be_nil
       end
@@ -53,14 +55,17 @@ describe Furoshiki::Shoes::Configuration do
     its(:name) { should eq('Sugar Clouds') }
     its(:shortname) { should eq('sweet-nebulae') }
     its(:ignore) { should include('pkg') }
+    its(:run) { should eq('bin/hello_world') }
     its(:gems) { should include('rspec') }
     its(:gems) { should include('shoes') }
     its(:version) { should eq('0.0.1') }
     its(:release) { should eq('Mindfully') }
     its(:icons) { should be_an_instance_of(Hash) }
     its(:dmg) { should be_an_instance_of(Hash) }
+    its(:working_dir) { should eq(config_filename.dirname) }
+    it { should be_valid }
 
-    describe "#icon" do
+    describe "#icons" do
       it 'has osx' do
         subject.icons[:osx].should eq('img/boots.icns')
       end
@@ -87,6 +92,10 @@ describe Furoshiki::Shoes::Configuration do
     it "incorporates custom features" do
       subject.custom.should eq('my custom feature')
     end
+
+    it "round-trips" do
+      Furoshiki::Shoes::Configuration.new(subject.to_hash).should eq(subject)
+    end
   end
 
   context "with name, but without explicit shortname" do
@@ -95,6 +104,39 @@ describe Furoshiki::Shoes::Configuration do
 
     its(:name) { should eq("Sugar Clouds") }
     its(:shortname) { should eq("sugarclouds") }
+  end
+
+  context "when the file to run doens't exist" do
+    let(:options) { {:run => "path/to/non-existent/file"} }
+    subject { Furoshiki::Shoes::Configuration.new options }
+
+    it { should_not be_valid }
+  end
+
+  context "when osx icon is not specified" do
+    include_context 'config'
+    let(:valid_config) { Furoshiki::Shoes::Configuration.load(config_filename) }
+    let(:options) { valid_config.to_hash.merge(:icons => {}) }
+    subject { Furoshiki::Shoes::Configuration.new(options) }
+
+    it "sets osx icon path to nil" do
+      subject.icons[:osx].should be_nil
+    end
+
+    it "is valid" do
+      subject.should be_valid
+    end
+  end
+
+  context "when osx icon is specified, but doesn't exist" do
+    let(:options) { ({:icons => {:osx => "path/to/non-existent/file"}}) }
+    subject { Furoshiki::Shoes::Configuration.new options }
+
+    it "sets osx icon path" do
+      subject.icons[:osx].should eq("path/to/non-existent/file")
+    end
+
+    it { should_not be_valid }
   end
 
   context "auto-loading" do
