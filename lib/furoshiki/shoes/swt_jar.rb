@@ -8,6 +8,11 @@ module Furoshiki
       # @param [Furoshiki::Shoes::Configuration] config user configuration
       def initialize(config = nil)
         @shoes_config = config || Furoshiki::Shoes::Configuration.load
+
+        unless config.valid?
+          raise Furoshiki::ConfigurationError, "Invalid configuration.\n#{config.error_message_list}"
+        end
+
         Dir.chdir working_dir do
           @config = Warbler::Config.new do |config|
             config.jar_name = @shoes_config.shortname

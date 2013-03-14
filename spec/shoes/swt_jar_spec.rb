@@ -1,3 +1,4 @@
+require 'spec_helper'
 require_relative 'spec_helper'
 require 'pathname'
 require 'furoshiki/shoes/swt_jar'
@@ -41,5 +42,14 @@ describe Furoshiki::Shoes::SwtJar do
 
     its(:default_dir) { should eq(output_dir) }
     its(:filename) { should eq(jar_name) }
+  end
+
+  describe "with an invalid configuration" do
+    let(:config) { Furoshiki::Shoes::Configuration.new }
+    subject { Furoshiki::Shoes::SwtJar.new(config) }
+
+    it "fails to initialize" do
+      lambda { subject }.should raise_error(Furoshiki::ConfigurationError)
+    end
   end
 end

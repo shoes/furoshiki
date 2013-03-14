@@ -15,6 +15,11 @@ module Furoshiki
       # @param [Shoes::Package::Configuration] config user configuration
       def initialize(config)
         @config = config
+
+        unless config.valid?
+          raise Furoshiki::ConfigurationError, "Invalid configuration.\n#{config.error_message_list}"
+        end
+
         home = ENV['FUROSHIKI_HOME'] || Dir.home
         @cache_dir = Pathname.new(home).join('.furoshiki', 'cache')
         @default_package_dir = working_dir.join('pkg')

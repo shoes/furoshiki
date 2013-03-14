@@ -116,4 +116,12 @@ describe Furoshiki::Shoes::SwtApp do
       end
     end
   end
+
+  describe "with an invalid configuration" do
+    let(:config) { Furoshiki::Shoes::Configuration.new }
+
+    it "fails to initialize" do
+      lambda { subject }.should raise_error(Furoshiki::ConfigurationError)
+    end
+  end
 end
