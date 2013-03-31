@@ -11,17 +11,18 @@ describe Furoshiki::Shoes::SwtJar do
 
   context "when creating a .jar" do
     before :all do
-      output_dir.rmtree if output_dir.exist?
-      output_dir.mkpath
-      Dir.chdir app_dir do
-        @jar_path = subject.package(output_dir)
+      @output_dir.rmtree if @output_dir.exist?
+      @output_dir.mkpath
+      config = Furoshiki::Shoes::Configuration.load(@config_filename)
+      @subject = Furoshiki::Shoes::SwtJar.new(config)
+      Dir.chdir @app_dir do
+        @jar_path = @subject.package(@output_dir)
       end
     end
 
     let(:jar_name) { 'sweet-nebulae.jar' }
-    let(:output_file) { Pathname.new(output_dir.join jar_name) }
-    let(:config) { Furoshiki::Shoes::Configuration.load(config_filename) }
-    subject { Furoshiki::Shoes::SwtJar.new(config) }
+    let(:output_file) { Pathname.new(@output_dir.join jar_name) }
+    subject { @subject }
 
     it "creates a .jar" do
       output_file.should exist
@@ -40,7 +41,7 @@ describe Furoshiki::Shoes::SwtJar do
       jar.entries.should_not include("dir_to_ignore/file_to_ignore")
     end
 
-    its(:default_dir) { should eq(output_dir) }
+    its(:default_dir) { should eq(@output_dir) }
     its(:filename) { should eq(jar_name) }
   end
 
