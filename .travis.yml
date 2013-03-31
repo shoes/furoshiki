@@ -1,0 +1,11 @@
+language: ruby
+script: "rspec"
+rvm: jruby
+notifications:
+  irc: "irc.freenode.org#shoes"
+  email:
+    recipients:
+      - wasnotrice@gmail.com
+      - tobias.pfeiffer@student.hpi.uni-potsdam.de
+    on_success: change # [always|never|change] # default: change
+    on_failure: change # [always|never|change] # default: always
