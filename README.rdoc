@@ -1,4 +1,4 @@
-= furoshiki
+= furoshiki {<img src="https://travis-ci.org/shoes/furoshiki.png?branch=master" alt="Build Status" />}[https://travis-ci.org/shoes/furoshiki]
 
 風呂敷 (Furoshiki) is a simple way to package your Ruby applications for
 distribution on Windows, Linux, and OSX. A 風呂敷 is "a type of traditional
