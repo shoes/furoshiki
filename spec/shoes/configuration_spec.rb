@@ -50,7 +50,7 @@ describe Furoshiki::Shoes::Configuration do
 
   context "with options" do
     include_context 'config'
-    subject { Furoshiki::Shoes::Configuration.load(config_filename) }
+    subject { Furoshiki::Shoes::Configuration.load(@config_filename) }
 
     its(:name) { should eq('Sugar Clouds') }
     its(:shortname) { should eq('sweet-nebulae') }
@@ -62,7 +62,7 @@ describe Furoshiki::Shoes::Configuration do
     its(:release) { should eq('Mindfully') }
     its(:icons) { should be_an_instance_of(Hash) }
     its(:dmg) { should be_an_instance_of(Hash) }
-    its(:working_dir) { should eq(config_filename.dirname) }
+    its(:working_dir) { should eq(@config_filename.dirname) }
     it { should be_valid }
 
     describe "#icons" do
@@ -115,7 +115,7 @@ describe Furoshiki::Shoes::Configuration do
 
   context "when osx icon is not specified" do
     include_context 'config'
-    let(:valid_config) { Furoshiki::Shoes::Configuration.load(config_filename) }
+    let(:valid_config) { Furoshiki::Shoes::Configuration.load(@config_filename) }
     let(:options) { valid_config.to_hash.merge(:icons => {}) }
     subject { Furoshiki::Shoes::Configuration.new(options) }
 
@@ -144,7 +144,7 @@ describe Furoshiki::Shoes::Configuration do
 
     context "without a path" do
       it "looks for 'app.yaml' in current directory" do
-        Dir.chdir config_filename.parent do
+        Dir.chdir @config_filename.parent do
           config = Furoshiki::Shoes::Configuration.load
           config.shortname.should eq('sweet-nebulae')
         end
@@ -167,22 +167,22 @@ describe Furoshiki::Shoes::Configuration do
     end
 
     context "with an 'app.yaml'" do
-      let(:path) { config_filename }
+      let(:path) { @config_filename }
       it_behaves_like "config with path"
     end
 
     context "with a path to a directory containing an 'app.yaml'" do
-      let(:path) { config_filename.parent }
+      let(:path) { @config_filename.parent }
       it_behaves_like "config with path"
     end
 
     context "with a path to a file that is siblings with an 'app.yaml'" do
-      let(:path) { config_filename.parent.join('sibling.rb') }
+      let(:path) { @config_filename.parent.join('sibling.rb') }
       it_behaves_like "config with path"
     end
 
     context "with a path that exists, but no 'app.yaml'" do
-      let(:path) { config_filename.parent.join('bin/hello_world') }
+      let(:path) { @config_filename.parent.join('bin/hello_world') }
       subject { Furoshiki::Shoes::Configuration.load(path) }
 
       its(:name) { should eq('hello_world') }

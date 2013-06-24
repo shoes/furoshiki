@@ -9,13 +9,12 @@ describe Furoshiki::Shoes::SwtApp do
   include_context 'config'
   include_context 'package'
 
-  let(:app_name) { 'Sugar Clouds.app' }
-  let(:output_file) { output_dir.join app_name }
-  let(:config) { Furoshiki::Shoes::Configuration.load config_filename}
-  let(:launcher) { output_file.join('Contents/MacOS/JavaAppLauncher') }
-  let(:icon)  { output_file.join('Contents/Resources/boots.icns') }
-  let(:jar) { output_file.join('Contents/Java/sweet-nebulae.jar') }
-  subject { Furoshiki::Shoes::SwtApp.new config }
+  let(:config) {Furoshiki::Shoes::Configuration.load @config_filename }
+  subject {Furoshiki::Shoes::SwtApp.new config}
+
+  let(:launcher) { @output_file.join('Contents/MacOS/JavaAppLauncher') }
+  let(:icon)  { @output_file.join('Contents/Resources/boots.icns') }
+  let(:jar) { @output_file.join('Contents/Java/sweet-nebulae.jar') }
 
   # $FUROSHIKI_HOME is set in spec_helper.rb for testing purposes,
   # but should default to $HOME
@@ -24,6 +23,7 @@ describe Furoshiki::Shoes::SwtApp do
       @old_furoshiki_home = ENV['FUROSHIKI_HOME']
       ENV['FUROSHIKI_HOME'] = nil
     end
+
 
     its(:cache_dir) { should eq(Pathname.new(Dir.home).join('.furoshiki', 'cache')) }
 
@@ -37,8 +37,8 @@ describe Furoshiki::Shoes::SwtApp do
     its(:cache_dir) { should eq(cache_dir) }
 
     it "sets package dir to {pwd}/pkg" do
-      Dir.chdir app_dir do
-        subject.default_package_dir.should eq(app_dir.join 'pkg')
+      Dir.chdir @app_dir do
+        subject.default_package_dir.should eq(@app_dir.join 'pkg')
       end
     end
 
@@ -48,17 +48,22 @@ describe Furoshiki::Shoes::SwtApp do
 
   context "when creating a .app" do
     before :all do
-      output_dir.rmtree if output_dir.exist?
-      output_dir.mkpath
-      Dir.chdir app_dir do
-        subject.package
+      @output_dir.rmtree if @output_dir.exist?
+      @output_dir.mkpath
+      app_name = 'Sugar Clouds.app'
+      @output_file = @output_dir.join app_name
+      config   = Furoshiki::Shoes::Configuration.load @config_filename
+      @subject = Furoshiki::Shoes::SwtApp.new config
+      Dir.chdir @app_dir do
+        @subject.package
       end
     end
+    subject { @subject }
 
     its(:template_path) { should exist }
 
     it "creates a .app" do
-      output_file.should exist
+      @output_file.should exist
     end
 
     it "includes launcher" do
@@ -73,7 +78,7 @@ describe Furoshiki::Shoes::SwtApp do
     end
 
     it "deletes generic icon" do
-      icon.parent.join('GenericApp.icns').should_not exist 
+      icon.parent.join('GenericApp.icns').should_not exist
     end
 
     it "injects icon" do
@@ -85,14 +90,14 @@ describe Furoshiki::Shoes::SwtApp do
     end
 
     it "removes any extraneous jars" do
-      jar_dir_contents = output_file.join("Contents/Java").children
+      jar_dir_contents = @output_file.join("Contents/Java").children
       jar_dir_contents.reject {|f| f == jar }.should be_empty
     end
 
     describe "Info.plist" do
       require 'plist'
       before :all do
-        @plist = Plist.parse_xml(output_file.join 'Contents/Info.plist')
+        @plist = Plist.parse_xml(@output_file.join 'Contents/Info.plist')
       end
 
       it "sets identifier" do
@@ -119,6 +124,7 @@ describe Furoshiki::Shoes::SwtApp do
 
   describe "with an invalid configuration" do
     let(:config) { Furoshiki::Shoes::Configuration.new }
+    subject { Furoshiki::Shoes::SwtApp.new config }
 
     it "fails to initialize" do
       lambda { subject }.should raise_error(Furoshiki::ConfigurationError)
