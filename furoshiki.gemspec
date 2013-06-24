@@ -18,4 +18,10 @@ Gem::Specification.new do |s|
 
   s.add_dependency "warbler"
   s.add_dependency "plist"
+  # only for packaging shoes apps
+  s.add_dependency 'shoes'
+
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
+
 end
