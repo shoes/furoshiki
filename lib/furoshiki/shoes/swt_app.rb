@@ -12,6 +12,8 @@ module Furoshiki
     class SwtApp
       include FileUtils
 
+      REMOTE_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.1.zip'
+
       # @param [Shoes::Package::Configuration] config user configuration
       def initialize(config)
         @config = config
@@ -103,7 +105,10 @@ module Furoshiki
       end
 
       def download_following_redirects(remote_url, local_path, redirect_limit = 5)
-        raise Furoshiki::DownloadError, "Too many redirects" if redirect_limit == 0
+        if redirect_limit == 0
+          raise Furoshiki::DownloadError,
+                "Too many redirects trying to reach #{remote_url}"
+        end
 
         uri = URI(remote_url)
         Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
@@ -133,7 +138,8 @@ module Furoshiki
       end
 
       def remote_template_url
-        "#{downloads_url}/#{template_basename}-#{latest_template_version}#{template_extension}"
+        #"#{downloads_url}/#{template_basename}-#{latest_template_version}#{template_extension}"
+        REMOTE_TEMPLATE_URL
       end
 
       def move_to_package_dir(path)

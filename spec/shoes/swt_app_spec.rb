@@ -43,7 +43,7 @@ describe Furoshiki::Shoes::SwtApp do
     end
 
     its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
-    its(:remote_template_url) { should eq('http://shoesrb.com/downloads/shoes-app-template-0.0.1.zip') }
+    its(:remote_template_url) { should eq(Furoshiki::Shoes::SwtApp::REMOTE_TEMPLATE_URL) }
   end
 
   context "when creating a .app" do
