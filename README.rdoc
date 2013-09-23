@@ -9,10 +9,6 @@ or other goods."
 
 This is all super alpha, and is subject to change at any time.
 
-== Requirements
-
-JDK 1.7.0
-
 == Packaging Shoes apps
 
 For the moment, we only really package Shoes apps. See ALPHA WARNING above ;)
