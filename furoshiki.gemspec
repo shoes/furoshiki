@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "plist"
   # only for packaging shoes apps
   s.add_dependency 'shoes'
+  s.add_dependency 'rubyzip', '< 1.0.0'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
