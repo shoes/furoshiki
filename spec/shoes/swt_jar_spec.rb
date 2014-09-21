@@ -37,7 +37,7 @@ describe Furoshiki::Shoes::SwtJar do
     end
 
     it "excludes directories recursively" do
-      jar = Zip::ZipFile.new(output_file)
+      jar = Zip::File.new(output_file)
       jar.entries.should_not include("dir_to_ignore/file_to_ignore")
     end
 

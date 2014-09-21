@@ -5,6 +5,8 @@ SHOESSPEC_ROOT = File.expand_path('..', __FILE__)
 ENV['FUROSHIKI_HOME'] = SHOESSPEC_ROOT
 
 require 'rspec'
+require 'rspec/its'
+require 'pry'
 require 'pathname'
 require 'furoshiki/shoes'
 

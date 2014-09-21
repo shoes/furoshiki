@@ -1,5 +1,5 @@
 require 'pathname'
-require 'zip/zip'
+require 'zip'
 
 module Furoshiki
   module Zip
@@ -15,12 +15,13 @@ module Furoshiki
     # @example
     # To zip the directory "/tmp/input" so that unarchiving
     # gives you a single directory "input":
-    # 
-    #   zip = Furoshiki::Zip::Recursive
+    #
+    #   output_file = '/tmp/out.zip'
+    #
+    #   zip = Furoshiki::Zip::Recursive(output_file)
     #   entries = Pathname.new("/tmp/input").entries
     #   zip_prefix = ''
     #   disk_prefix = '/tmp'
-    #   output_file = '/tmp/out.zip'
     #   zf.write(entries, disk_prefix, zip_prefix, output_file)
     class Recursive
       def initialize(output_file)
@@ -30,9 +31,8 @@ module Furoshiki
       # @param [Array<Pathname>] entries the initial set of files to include
       # @param [Pathname] disk_prefix a path prefix for existing entries
       # @param [Pathname] zip_prefix a path prefix to add within archive
-      # @param [Pathname] output_file the location of the output archive
       def write(entries, disk_prefix, zip_prefix)
-        io = ::Zip::ZipFile.open(@output_file, ::Zip::ZipFile::CREATE); 
+        io = ::Zip::File.open(@output_file, ::Zip::File::CREATE);
         write_entries(entries, disk_prefix, zip_prefix, io)
         io.close();
       end

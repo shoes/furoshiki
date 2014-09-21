@@ -170,12 +170,14 @@ module Furoshiki
       def extract_template
         raise IOError, "Couldn't find app template at #{template_path}." unless template_path.size?
         extracted_app = nil
-        ::Zip::ZipFile.new(template_path).each do |entry|
-          # Fragile hack
-          extracted_app = template_path.join(entry.name) if Pathname.new(entry.name).extname == '.app'
-          p = tmp.join(entry.name)
-          p.dirname.mkpath
-          entry.extract(p)
+
+        ::Zip::File.open(template_path) do |zip_file|
+          zip_file.each do |entry|
+            extracted_app = template_path.join(entry.name) if Pathname.new(entry.name).extname == '.app'
+            p = tmp.join(entry.name)
+            p.dirname.mkpath
+            entry.extract(p)
+          end
         end
         mv tmp.join(extracted_app.basename.to_s), tmp_app_path
       end
