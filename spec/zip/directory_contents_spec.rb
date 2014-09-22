@@ -14,16 +14,16 @@ describe Furoshiki::Zip::DirectoryContents do
     end
 
     it "exists" do
-      @output_file.should exist
+      expect(@output_file).to exist
     end
 
     it "does not include input directory without parents" do
-      @zip.entries.map(&:name).should_not include(add_trailing_slash input_dir.basename)
+      expect(@zip.entries.map(&:name)).not_to include(add_trailing_slash input_dir.basename)
     end
 
     relative_input_paths(input_dir).each do |path|
       it "includes all children of input directory" do
-        @zip.entries.map(&:name).should include(path)
+        expect(@zip.entries.map(&:name)).to include(path)
       end
     end
   end

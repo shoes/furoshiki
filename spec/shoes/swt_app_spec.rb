@@ -38,7 +38,7 @@ describe Furoshiki::Shoes::SwtApp do
 
     it "sets package dir to {pwd}/pkg" do
       Dir.chdir @app_dir do
-        subject.default_package_dir.should eq(@app_dir.join 'pkg')
+        expect(subject.default_package_dir).to eq(@app_dir.join 'pkg')
       end
     end
 
@@ -63,35 +63,35 @@ describe Furoshiki::Shoes::SwtApp do
     its(:template_path) { should exist }
 
     it "creates a .app" do
-      @output_file.should exist
+      expect(@output_file).to exist
     end
 
     it "includes launcher" do
-      launcher.should exist
+      expect(launcher).to exist
     end
 
     # Windows can't test this
     platform_is_not :windows do
       it "makes launcher executable" do
-        launcher.should be_executable
+        expect(launcher).to be_executable
       end
     end
 
     it "deletes generic icon" do
-      icon.parent.join('GenericApp.icns').should_not exist
+      expect(icon.parent.join('GenericApp.icns')).not_to exist
     end
 
     it "injects icon" do
-      icon.should exist
+      expect(icon).to exist
     end
 
     it "injects jar" do
-      jar.should exist
+      expect(jar).to exist
     end
 
     it "removes any extraneous jars" do
       jar_dir_contents = @output_file.join("Contents/Java").children
-      jar_dir_contents.reject {|f| f == jar }.should be_empty
+      expect(jar_dir_contents.reject {|f| f == jar }).to be_empty
     end
 
     describe "Info.plist" do
@@ -101,23 +101,23 @@ describe Furoshiki::Shoes::SwtApp do
       end
 
       it "sets identifier" do
-        @plist['CFBundleIdentifier'].should eq('com.hackety.shoes.sweet-nebulae')
+        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.sweet-nebulae')
       end
 
       it "sets display name" do
-        @plist['CFBundleDisplayName'].should eq('Sugar Clouds')
+        expect(@plist['CFBundleDisplayName']).to eq('Sugar Clouds')
       end
 
       it "sets bundle name" do
-        @plist['CFBundleName'].should eq('Sugar Clouds')
+        expect(@plist['CFBundleName']).to eq('Sugar Clouds')
       end
 
       it "sets icon" do
-        @plist['CFBundleIconFile'].should eq('boots.icns')
+        expect(@plist['CFBundleIconFile']).to eq('boots.icns')
       end
 
       it "sets version" do
-        @plist['CFBundleVersion'].should eq('0.0.1')
+        expect(@plist['CFBundleVersion']).to eq('0.0.1')
       end
     end
   end
@@ -127,7 +127,7 @@ describe Furoshiki::Shoes::SwtApp do
     subject { Furoshiki::Shoes::SwtApp.new config }
 
     it "fails to initialize" do
-      lambda { subject }.should raise_error(Furoshiki::ConfigurationError)
+      expect { subject }.to raise_error(Furoshiki::ConfigurationError)
     end
   end
 end

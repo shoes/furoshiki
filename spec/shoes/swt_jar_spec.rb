@@ -25,20 +25,20 @@ describe Furoshiki::Shoes::SwtJar do
     subject { @subject }
 
     it "creates a .jar" do
-      output_file.should exist
+      expect(output_file).to exist
     end
 
     it "returns path to .jar" do
-      @jar_path.should eq(output_file.to_s)
+      expect(@jar_path).to eq(output_file.to_s)
     end
 
     it "creates .jar smaller than 50MB" do
-      File.size(output_file).should be < 50 * 1024 * 1024
+      expect(File.size(output_file)).to be < 50 * 1024 * 1024
     end
 
     it "excludes directories recursively" do
       jar = Zip::File.new(output_file)
-      jar.entries.should_not include("dir_to_ignore/file_to_ignore")
+      expect(jar.entries).not_to include("dir_to_ignore/file_to_ignore")
     end
 
     its(:default_dir) { should eq(@output_dir) }
@@ -50,7 +50,7 @@ describe Furoshiki::Shoes::SwtJar do
     subject { Furoshiki::Shoes::SwtJar.new(config) }
 
     it "fails to initialize" do
-      lambda { subject }.should raise_error(Furoshiki::ConfigurationError)
+      expect { subject }.to raise_error(Furoshiki::ConfigurationError)
     end
   end
 end

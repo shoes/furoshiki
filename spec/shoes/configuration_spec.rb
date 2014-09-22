@@ -15,35 +15,35 @@ describe Furoshiki::Shoes::Configuration do
     its(:dmg) { should be_an_instance_of(Hash) }
     its(:run) { should be_nil }
     its(:working_dir) { should eq(Pathname.new(Dir.pwd)) }
-    it { should_not be_valid } # no :run
+    it { is_expected.not_to be_valid } # no :run
 
     describe "#icons" do
       it 'osx is nil' do
-        subject.icons[:osx].should be_nil
+        expect(subject.icons[:osx]).to be_nil
       end
 
       it 'gtk is nil' do
-        subject.icons[:gtk].should be_nil
+        expect(subject.icons[:gtk]).to be_nil
       end
 
       it 'win32 is nil' do
-        subject.icons[:win32].should be_nil
+        expect(subject.icons[:win32]).to be_nil
       end
     end
 
     describe "#dmg" do
       it "has ds_store" do
-        subject.dmg[:ds_store].should eq('path/to/default/.DS_Store')
+        expect(subject.dmg[:ds_store]).to eq('path/to/default/.DS_Store')
       end
 
       it "has background" do
-        subject.dmg[:background].should eq('path/to/default/background.png')
+        expect(subject.dmg[:background]).to eq('path/to/default/background.png')
       end
     end
 
     describe "#to_hash" do
       it "round-trips" do
-        Furoshiki::Shoes::Configuration.new(subject.to_hash).should eq(subject)
+        expect(Furoshiki::Shoes::Configuration.new(subject.to_hash)).to eq(subject)
       end
     end
   end
@@ -63,38 +63,38 @@ describe Furoshiki::Shoes::Configuration do
     its(:icons) { should be_an_instance_of(Hash) }
     its(:dmg) { should be_an_instance_of(Hash) }
     its(:working_dir) { should eq(@config_filename.dirname) }
-    it { should be_valid }
+    it { is_expected.to be_valid }
 
     describe "#icons" do
       it 'has osx' do
-        subject.icons[:osx].should eq('img/boots.icns')
+        expect(subject.icons[:osx]).to eq('img/boots.icns')
       end
 
       it 'has gtk' do
-        subject.icons[:gtk].should eq('img/boots_512x512x32.png')
+        expect(subject.icons[:gtk]).to eq('img/boots_512x512x32.png')
       end
 
       it 'has win32' do
-        subject.icons[:win32].should eq('img/boots.ico')
+        expect(subject.icons[:win32]).to eq('img/boots.ico')
       end
     end
 
     describe "#dmg" do
       it "has ds_store" do
-        subject.dmg[:ds_store].should eq('path/to/custom/.DS_Store')
+        expect(subject.dmg[:ds_store]).to eq('path/to/custom/.DS_Store')
       end
 
       it "has background" do
-        subject.dmg[:background].should eq('path/to/custom/background.png')
+        expect(subject.dmg[:background]).to eq('path/to/custom/background.png')
       end
     end
 
     it "incorporates custom features" do
-      subject.custom.should eq('my custom feature')
+      expect(subject.custom).to eq('my custom feature')
     end
 
     it "round-trips" do
-      Furoshiki::Shoes::Configuration.new(subject.to_hash).should eq(subject)
+      expect(Furoshiki::Shoes::Configuration.new(subject.to_hash)).to eq(subject)
     end
   end
 
@@ -110,7 +110,7 @@ describe Furoshiki::Shoes::Configuration do
     let(:options) { {:run => "path/to/non-existent/file"} }
     subject { Furoshiki::Shoes::Configuration.new options }
 
-    it { should_not be_valid }
+    it { is_expected.not_to be_valid }
   end
 
   context "when osx icon is not specified" do
@@ -120,11 +120,11 @@ describe Furoshiki::Shoes::Configuration do
     subject { Furoshiki::Shoes::Configuration.new(options) }
 
     it "sets osx icon path to nil" do
-      subject.icons[:osx].should be_nil
+      expect(subject.icons[:osx]).to be_nil
     end
 
     it "is valid" do
-      subject.should be_valid
+      expect(subject).to be_valid
     end
   end
 
@@ -133,10 +133,10 @@ describe Furoshiki::Shoes::Configuration do
     subject { Furoshiki::Shoes::Configuration.new options }
 
     it "sets osx icon path" do
-      subject.icons[:osx].should eq("path/to/non-existent/file")
+      expect(subject.icons[:osx]).to eq("path/to/non-existent/file")
     end
 
-    it { should_not be_valid }
+    it { is_expected.not_to be_valid }
   end
 
   context "auto-loading" do
@@ -146,13 +146,13 @@ describe Furoshiki::Shoes::Configuration do
       it "looks for 'app.yaml' in current directory" do
         Dir.chdir @config_filename.parent do
           config = Furoshiki::Shoes::Configuration.load
-          config.shortname.should eq('sweet-nebulae')
+          expect(config.shortname).to eq('sweet-nebulae')
         end
       end
 
       it "blows up if it can't find the file" do
         Dir.chdir File.dirname(__FILE__) do
-          lambda { config = Furoshiki::Shoes::Configuration.load }.should raise_error
+          expect { config = Furoshiki::Shoes::Configuration.load }.to raise_error
         end
       end
     end
@@ -161,7 +161,7 @@ describe Furoshiki::Shoes::Configuration do
       it "finds the config" do
         Dir.chdir File.dirname(__FILE__) do
           config = Furoshiki::Shoes::Configuration.load(path)
-          config.shortname.should eq('sweet-nebulae')
+          expect(config.shortname).to eq('sweet-nebulae')
         end
       end
     end
@@ -191,7 +191,7 @@ describe Furoshiki::Shoes::Configuration do
 
     context "when the file doesn't exist" do
       it "blows up" do
-        lambda { Furoshiki::Shoes::Configuration.load('some/bogus/path') }.should raise_error
+        expect { Furoshiki::Shoes::Configuration.load('some/bogus/path') }.to raise_error
       end
     end
   end
