@@ -10,7 +10,7 @@ describe Furoshiki::Zip::DirectoryContents do
     before :all do
       zip_directory_contents = Furoshiki::Zip::DirectoryContents.new input_dir, @output_file
       zip_directory_contents.write
-      @zip = Zip::ZipFile.open @output_file
+      @zip = Zip::File.open @output_file
     end
 
     it "exists" do

@@ -1,3 +1,5 @@
+require 'rspec/its'
+
 module PackageHelpers
   # need these values from a context block, so let doesn't work
   def spec_dir

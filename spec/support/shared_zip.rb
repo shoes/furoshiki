@@ -10,7 +10,7 @@ end
 shared_context 'zip' do
   include_context 'package'
   let(:output_file) { @output_dir.join 'zip_directory_spec.zip' }
-  let(:zip) { Zip::ZipFile.open output_file }
+  let(:zip) { Zip::File.open output_file }
 
   before :all do
     @output_dir.mkpath
