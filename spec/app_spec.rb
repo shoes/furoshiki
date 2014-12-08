@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_relative 'spec_helper'
 require 'pathname'
 require 'furoshiki/jar_app'
 
@@ -33,7 +32,7 @@ describe Furoshiki::JarApp do
   end
 
   context "default" do
-    let(:cache_dir) { Pathname.new(SHOESSPEC_ROOT).join('.furoshiki', 'cache') }
+    let(:cache_dir) { Pathname.new(FUROSHIKI_SPEC_DIR).join('.furoshiki', 'cache') }
     its(:cache_dir) { should eq(cache_dir) }
 
     it "sets package dir to {pwd}/pkg" do
@@ -48,7 +47,7 @@ describe Furoshiki::JarApp do
 
   context "when creating a .app" do
     before :all do
-      @output_dir.rmtree if @output_dir.exist?
+      #@output_dir.rmtree if @output_dir.exist?
       @output_dir.mkpath
 
       app_name = 'Ruby App.app'
