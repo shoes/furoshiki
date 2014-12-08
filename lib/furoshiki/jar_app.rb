@@ -135,7 +135,7 @@ module Furoshiki
 
     def remote_template_url
       #"#{downloads_url}/#{template_basename}-#{latest_template_version}#{template_extension}"
-      Shoes::Configuration::REMOTE_JAR_APP_TEMPLATE_URL
+      Configuration::REMOTE_JAR_APP_TEMPLATE_URL
     end
 
     def move_to_package_dir(path)

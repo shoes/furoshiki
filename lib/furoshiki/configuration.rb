@@ -1,6 +1,7 @@
 require 'pathname'
 require 'yaml'
 require 'furoshiki/validator'
+require 'furoshiki/warbler_extensions'
 require 'furoshiki/util'
 
 module Furoshiki
@@ -14,6 +15,8 @@ module Furoshiki
   # after initialization, dump it with #to_hash, make your changes,
   # and instantiate a new object.
   class Configuration
+    REMOTE_JAR_APP_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.1.zip'
+
     include Util
 
     # @param [Hash] config user options

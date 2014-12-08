@@ -42,7 +42,7 @@ describe Furoshiki::JarApp do
     end
 
     its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
-    its(:remote_template_url) { should eq(Furoshiki::Shoes::Configuration::REMOTE_JAR_APP_TEMPLATE_URL) }
+    its(:remote_template_url) { should eq(Furoshiki::Configuration::REMOTE_JAR_APP_TEMPLATE_URL) }
   end
 
   context "when creating a .app" do
@@ -126,8 +126,12 @@ describe Furoshiki::JarApp do
   end
 
   describe "with an invalid configuration" do
-    let(:config) { Furoshiki::Shoes::Configuration.create }
+    let(:config) { Furoshiki::Configuration.new }
     subject { Furoshiki::JarApp.new config }
+
+    before do
+      allow(config).to receive(:valid?) { false }
+    end
 
     it "fails to initialize" do
       expect { subject }.to raise_error(Furoshiki::ConfigurationError)

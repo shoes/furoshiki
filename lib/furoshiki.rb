@@ -1,3 +1,4 @@
-puts "OMG, nothing here!"
-puts ""
-puts "You probably want to `require 'furoshiki/shoes'`"
+require 'furoshiki/configuration'
+require 'furoshiki/exceptions'
+require 'furoshiki/jar'
+require 'furoshiki/jar_app'

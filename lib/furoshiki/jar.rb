@@ -1,4 +1,3 @@
-require 'furoshiki/shoes/configuration'
 require 'warbler'
 require 'warbler/traits/furoshiki'
 

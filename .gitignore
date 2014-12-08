@@ -22,4 +22,3 @@ Gemfile.lock
 
 ## PROJECT::SPECIFIC
 spec/.furoshiki
-spec/shoes/.furoshiki
