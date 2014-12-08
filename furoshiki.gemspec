@@ -19,8 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency "warbler", '~> 1.4.4'
   s.add_dependency "plist"
   s.add_dependency 'rubyzip', '>= 1.0.0'
-  s.add_dependency 'shoes-core', '>= 4.0.0.pre2'
-  s.add_dependency 'shoes-swt', '>= 4.0.0.pre2'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '>= 3.0.0'
