@@ -12,6 +12,8 @@ module Furoshiki
     #   config = Shoes::Package::Configuration.load(config_file)
     #
     module Configuration
+      extend ::Furoshiki::Util
+
       REMOTE_JAR_APP_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.1.zip'
 
       # Convenience method for loading config from a file. Note that you
@@ -92,11 +94,21 @@ module Furoshiki
             background: 'path/to/default/background.png'
           },
           working_dir: Dir.pwd,
-          gems: 'shoes-core',
+          gems: ['shoes-core'],
           validator: Furoshiki::Shoes::Configuration::Validator,
           warbler_extensions: Furoshiki::Shoes::Configuration::WarblerExtensions
         }
-        Furoshiki::Configuration.new defaults.merge(config)
+
+        symbolized_config = deep_symbolize_keys(config)
+
+        # We want to retain all of the gems, but simply merging the hash will
+        # replace the default array
+        puts symbolized_config.inspect
+        print "was: #{symbolized_config[:gems]}, "
+        symbolized_config[:gems] = defaults[:gems].concat(Array(symbolized_config[:gems])).uniq
+        puts "is: #{symbolized_config[:gems]}"
+
+        Furoshiki::Configuration.new defaults.merge(symbolized_config)
       end
 
       class Validator < Furoshiki::Validator

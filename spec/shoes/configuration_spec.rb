@@ -3,12 +3,12 @@ require 'furoshiki/shoes/configuration'
 
 describe Furoshiki::Shoes::Configuration do
   context "defaults" do
-    subject { Furoshiki::Shoes::Configuration.new }
+    subject { Furoshiki::Shoes::Configuration.create }
 
     its(:name) { should eq('Shoes App') }
     its(:shortname) { should eq('shoesapp') }
     its(:ignore) { should eq(['pkg']) }
-    its(:gems) { should include('shoes') }
+    its(:gems) { should include('shoes-core') }
     its(:version) { should eq('0.0.0') }
     its(:release) { should eq('Rookie') }
     its(:icons) { should be_an_instance_of(Hash) }
@@ -43,7 +43,7 @@ describe Furoshiki::Shoes::Configuration do
 
     describe "#to_hash" do
       it "round-trips" do
-        expect(Furoshiki::Shoes::Configuration.new(subject.to_hash)).to eq(subject)
+        expect(Furoshiki::Shoes::Configuration.create(subject.to_hash)).to eq(subject)
       end
     end
   end
@@ -57,7 +57,7 @@ describe Furoshiki::Shoes::Configuration do
     its(:ignore) { should include('pkg') }
     its(:run) { should eq('bin/hello_world') }
     its(:gems) { should include('rspec') }
-    its(:gems) { should include('shoes') }
+    its(:gems) { should include('shoes-core') }
     its(:version) { should eq('0.0.1') }
     its(:release) { should eq('Mindfully') }
     its(:icons) { should be_an_instance_of(Hash) }
@@ -94,13 +94,13 @@ describe Furoshiki::Shoes::Configuration do
     end
 
     it "round-trips" do
-      expect(Furoshiki::Shoes::Configuration.new(subject.to_hash)).to eq(subject)
+      expect(Furoshiki::Shoes::Configuration.create(subject.to_hash)).to eq(subject)
     end
   end
 
   context "with name, but without explicit shortname" do
     let(:options) { {:name => "Sugar Clouds"} }
-    subject { Furoshiki::Shoes::Configuration.new options }
+    subject { Furoshiki::Shoes::Configuration.create options }
 
     its(:name) { should eq("Sugar Clouds") }
     its(:shortname) { should eq("sugarclouds") }
@@ -108,7 +108,7 @@ describe Furoshiki::Shoes::Configuration do
 
   context "when the file to run doens't exist" do
     let(:options) { {:run => "path/to/non-existent/file"} }
-    subject { Furoshiki::Shoes::Configuration.new options }
+    subject { Furoshiki::Shoes::Configuration.create options }
 
     it { is_expected.not_to be_valid }
   end
@@ -117,7 +117,7 @@ describe Furoshiki::Shoes::Configuration do
     include_context 'config'
     let(:valid_config) { Furoshiki::Shoes::Configuration.load(@config_filename) }
     let(:options) { valid_config.to_hash.merge(:icons => {}) }
-    subject { Furoshiki::Shoes::Configuration.new(options) }
+    subject { Furoshiki::Shoes::Configuration.create(options) }
 
     it "sets osx icon path to nil" do
       expect(subject.icons[:osx]).to be_nil
@@ -130,7 +130,7 @@ describe Furoshiki::Shoes::Configuration do
 
   context "when osx icon is specified, but doesn't exist" do
     let(:options) { ({:icons => {:osx => "path/to/non-existent/file"}}) }
-    subject { Furoshiki::Shoes::Configuration.new options }
+    subject { Furoshiki::Shoes::Configuration.create options }
 
     it "sets osx icon path" do
       expect(subject.icons[:osx]).to eq("path/to/non-existent/file")

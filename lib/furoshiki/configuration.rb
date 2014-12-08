@@ -1,5 +1,6 @@
 require 'pathname'
 require 'yaml'
+require 'furoshiki/util'
 
 module Furoshiki
   # Configuration for Furoshiki packagers.
@@ -12,6 +13,8 @@ module Furoshiki
   # after initialization, dump it with #to_hash, make your changes,
   # and instantiate a new object.
   class Configuration
+    include Util
+
     # @param [Hash] config user options
     # @param [String] working_dir directory in which to do packaging work
     def initialize(config = {})
@@ -29,7 +32,7 @@ module Furoshiki
       }
 
       # Overwrite defaults with supplied config
-      @config = config.inject(defaults) { |c, (k, v)| set_symbol_key c, k, v }
+      @config = deep_symbolize_keys(config, defaults)
 
       # Ensure these keys have workable values
       [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
@@ -100,22 +103,6 @@ module Furoshiki
           warbler_extensions.customize(config) if warbler_extensions.respond_to? :customize
         end
       end
-    end
-
-    private
-    # Ensure symbol keys, even in nested hashes
-    #
-    # @param [Hash] config the hash to set (key: value) on
-    # @param [#to_sym] k the key
-    # @param [Object] v the value
-    # @return [Hash] an updated hash
-    def set_symbol_key(config, k, v)
-      if v.kind_of? Hash
-        config[k.to_sym] = v.inject({}) { |hash, (k, v)| set_symbol_key(hash, k, v) }
-      else
-        config[k.to_sym] = v
-      end
-      config
     end
   end
 end
