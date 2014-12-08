@@ -1,5 +1,7 @@
 require 'pathname'
 require 'yaml'
+require 'furoshiki/configuration'
+require 'furoshiki/validator'
 
 module Furoshiki
   module Shoes
@@ -9,14 +11,7 @@ module Furoshiki
     #   config_file = '/path/to/app.yaml'
     #   config = Shoes::Package::Configuration.load(config_file)
     #
-    # If your configuration uses hashes, the keys will always be
-    # symbols, even if you have created it with string keys. It's just
-    # easier that way.
-    #
-    # This is a value object. If you need to modify your configuration
-    # after initialization, dump it with #to_hash, make your changes,
-    # and instantiate a new object.
-    class Configuration
+    module Configuration
       # Convenience method for loading config from a file. Note that you
       # can pass four kinds of paths to the loader. Given the following
       # file structure:
@@ -74,12 +69,11 @@ module Furoshiki
         end
         config = YAML.load(file.read)
         config[:working_dir] = dir
-        new(config)
+        create(config)
       end
 
       # @param [Hash] config user options
-      # @param [String] working_dir directory in which do packaging work
-      def initialize(config = {})
+      def self.create(config = {})
         defaults = {
           name: 'Shoes App',
           version: '0.0.0',
@@ -95,89 +89,44 @@ module Furoshiki
             ds_store: 'path/to/default/.DS_Store',
             background: 'path/to/default/background.png'
           },
-          working_dir: Dir.pwd
+          working_dir: Dir.pwd,
+          gems: 'shoes-core',
+          validator: Furoshiki::Shoes::Configuration::Validator,
+          warbler_extensions: Furoshiki::Shoes::Configuration::WarblerExtensions
         }
+        Furoshiki::Configuration.new defaults.merge(config)
+      end
 
-        # Overwrite defaults with supplied config
-        @config = config.inject(defaults) { |c, (k, v)| set_symbol_key c, k, v }
+      class Validator < Furoshiki::Validator
+        def validate
+          unless config.run && config.working_dir.join(config.run).exist?
+            add_missing_file_error(config.run, "Run file")
+          end
 
-        # Ensure that we always have what we need
-        [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
-        @config[:gems] << 'shoes-core'
-        @config[:working_dir] = Pathname.new(@config[:working_dir])
+          if config.icons[:osx] && !config.working_dir.join(config.icons[:osx]).exist?
+            add_missing_file_error(config.icons[:osx], "OS X icon file")
+          end
+        end
+      end
 
-        # Define reader for each key (#shortname defined below)
-        metaclass = class << self; self; end
-        @config.keys.reject {|k| k == :shortname}.each do |k|
-          metaclass.send(:define_method, k) do
-            @config[k]
+      class WarblerExtensions
+        def initialize(config)
+          @config = config
+        end
+
+        def customize(warbler_config)
+          warbler_config.tap do |warbler|
+            warbler.pathmaps.application = ['shoes-app/%p']
+            warbler.extend ShoesWarblerConfig
+            warbler.run = @config.run.split(/\s/).first
           end
         end
 
-        @errors = []
-      end
-
-      def shortname
-        @config[:shortname] || @config[:name].downcase.gsub(/\W+/, '')
-      end
-
-      def to_hash
-        @config
-      end
-
-      def validate
-        unless @config[:run] && working_dir.join(@config[:run]).exist?
-          add_missing_file_error(@config[:run], "Run file")
+        private
+        # Adds Shoes-specific functionality to the Warbler Config
+        module ShoesWarblerConfig
+          attr_accessor :run
         end
-
-        if @config[:icons][:osx] && !working_dir.join(@config[:icons][:osx]).exist?
-          add_missing_file_error(@config[:icons][:osx], "OS X icon file")
-        end
-      end
-
-      def valid?
-        validate
-        return errors.empty?
-      end
-
-      def errors
-        @errors.dup
-      end
-
-      def error_message_list
-        @errors.map {|m| "  - #{m}"}.join("\n")
-      end
-
-      def ==(other)
-        super unless other.class == self.class && other.respond_to?(:to_hash)
-        @config == other.to_hash &&
-          working_dir == other.working_dir &&
-          errors == other.errors
-      end
-
-      private
-      # Ensure symbol keys, even in nested hashes
-      #
-      # @param [Hash] config the hash to set (key: value) on
-      # @param [#to_sym] k the key
-      # @param [Object] v the value
-      # @return [Hash] an updated hash
-      def set_symbol_key(config, k, v)
-        if v.kind_of? Hash
-          config[k.to_sym] = v.inject({}) { |hash, (k, v)| set_symbol_key(hash, k, v) }
-        else
-          config[k.to_sym] = v
-        end
-        config
-      end
-
-      def add_error(message)
-        @errors << message
-      end
-
-      def add_missing_file_error(value, description)
-        message = "#{description} configured as '#{value}', but couldn't find file at #{working_dir.join(value.to_s)}"
-        add_error(message)
       end
     end
   end

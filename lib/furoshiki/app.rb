@@ -1,7 +1,7 @@
 require 'furoshiki/exceptions'
 require 'furoshiki/shoes/configuration'
 require 'furoshiki/zip/directory'
-require 'furoshiki/shoes/swt_jar'
+require 'furoshiki/jar'
 require 'fileutils'
 require 'plist'
 require 'open-uri'

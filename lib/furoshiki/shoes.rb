@@ -1,5 +1,6 @@
-require 'furoshiki/shoes/swt_jar'
-require 'furoshiki/shoes/swt_app'
+require 'furoshiki/shoes/configuration'
+require 'furoshiki/app'
+require 'furoshiki/jar'
 
 module Furoshiki
   module Shoes

@@ -1,11 +1,12 @@
 require 'spec_helper'
 require_relative 'spec_helper'
 require 'pathname'
-require 'furoshiki/shoes/swt_jar'
+require 'furoshiki/jar'
+require 'furoshiki/shoes/configuration'
 
 include PackageHelpers
 
-describe Furoshiki::Shoes::SwtJar do
+describe Furoshiki::Jar do
   include_context 'config'
   include_context 'package'
 
@@ -14,7 +15,7 @@ describe Furoshiki::Shoes::SwtJar do
       @output_dir.rmtree if @output_dir.exist?
       @output_dir.mkpath
       config = Furoshiki::Shoes::Configuration.load(@config_filename)
-      @subject = Furoshiki::Shoes::SwtJar.new(config)
+      @subject = Furoshiki::Jar.new(config)
       Dir.chdir @app_dir do
         @jar_path = @subject.package(@output_dir)
       end
@@ -46,8 +47,8 @@ describe Furoshiki::Shoes::SwtJar do
   end
 
   describe "with an invalid configuration" do
-    let(:config) { Furoshiki::Shoes::Configuration.new }
-    subject { Furoshiki::Shoes::SwtJar.new(config) }
+    let(:config) { Furoshiki::Shoes::Configuration.create}
+    subject { Furoshiki::Jar.new(config) }
 
     it "fails to initialize" do
       expect { subject }.to raise_error(Furoshiki::ConfigurationError)
