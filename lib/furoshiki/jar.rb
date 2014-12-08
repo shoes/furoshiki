@@ -1,6 +1,6 @@
 require 'furoshiki/shoes/configuration'
 require 'warbler'
-require 'warbler/traits/shoes'
+require 'warbler/traits/furoshiki'
 
 module Furoshiki
   class Jar

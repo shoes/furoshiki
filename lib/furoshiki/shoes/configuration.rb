@@ -2,6 +2,7 @@ require 'pathname'
 require 'yaml'
 require 'furoshiki/configuration'
 require 'furoshiki/validator'
+require 'furoshiki/warbler_extensions'
 
 module Furoshiki
   module Shoes
@@ -103,10 +104,7 @@ module Furoshiki
 
         # We want to retain all of the gems, but simply merging the hash will
         # replace the default array
-        puts symbolized_config.inspect
-        print "was: #{symbolized_config[:gems]}, "
         symbolized_config[:gems] = defaults[:gems].concat(Array(symbolized_config[:gems])).uniq
-        puts "is: #{symbolized_config[:gems]}"
 
         Furoshiki::Configuration.new defaults.merge(symbolized_config)
       end
@@ -123,11 +121,7 @@ module Furoshiki
         end
       end
 
-      class WarblerExtensions
-        def initialize(config)
-          @config = config
-        end
-
+      class WarblerExtensions < Furoshiki::WarblerExtensions
         def customize(warbler_config)
           warbler_config.tap do |warbler|
             warbler.pathmaps.application = ['shoes-app/%p']

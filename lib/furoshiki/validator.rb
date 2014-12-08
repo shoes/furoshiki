@@ -14,7 +14,7 @@ module Furoshiki
 
     def reset_and_validate
       @errors.clear
-      validate
+      validate if respond_to? :validate
     end
 
     def errors

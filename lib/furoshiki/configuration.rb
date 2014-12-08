@@ -1,5 +1,6 @@
 require 'pathname'
 require 'yaml'
+require 'furoshiki/validator'
 require 'furoshiki/util'
 
 module Furoshiki
@@ -52,15 +53,11 @@ module Furoshiki
     end
 
     def validator
-      return @validator unless @validator.nil?
-      return nil if @config[:validator].nil?
-      @validator = @config[:validator].new(self)
+      @validator ||= validator_class.new(self)
     end
 
     def warbler_extensions
-      return @warbler_extensions unless @warbler_extensions.nil?
-      return nil if @config[:warbler_extensions].nil?
-      @warbler_extensions = @config[:warbler_extensions].new(self)
+      @warbler_extensions ||= warbler_extensions_class.new(self)
     end
 
     def to_hash
@@ -86,8 +83,9 @@ module Furoshiki
     end
 
     def to_warbler_config
-      Warbler::Config.new do |config|
-        Dir.chdir working_dir do
+      warbler_config = nil
+      Dir.chdir working_dir do
+        warbler_config = Warbler::Config.new do |config|
           config.jar_name = self.shortname
           specs = self.gems.map { |g| Gem::Specification.find_by_name(g) }
           dependencies = specs.map { |s| s.runtime_dependencies }.flatten
@@ -103,6 +101,16 @@ module Furoshiki
           warbler_extensions.customize(config) if warbler_extensions.respond_to? :customize
         end
       end
+      warbler_config
+    end
+
+    private
+    def warbler_extensions_class
+      @warbler_extensions_class ||= @config.fetch(:warbler_extensions_class) { Furoshiki::WarblerExtensions }
+    end
+
+    def validator_class
+      @validator_class ||= @config.fetch(:validator) { Furoshiki::Validator }
     end
   end
 end
