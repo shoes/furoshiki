@@ -1,16 +1,16 @@
 require 'spec_helper'
 require_relative 'spec_helper'
 require 'pathname'
-require 'furoshiki/shoes/swt_app'
+require 'furoshiki/jar_app'
 
 include PackageHelpers
 
-describe Furoshiki::Shoes::SwtApp do
+describe Furoshiki::JarApp do
   include_context 'config'
   include_context 'package'
 
   let(:config) {Furoshiki::Shoes::Configuration.load @config_filename }
-  subject {Furoshiki::Shoes::SwtApp.new config}
+  subject {Furoshiki::JarApp.new config}
 
   let(:launcher) { @output_file.join('Contents/MacOS/JavaAppLauncher') }
   let(:icon)  { @output_file.join('Contents/Resources/boots.icns') }
@@ -43,7 +43,7 @@ describe Furoshiki::Shoes::SwtApp do
     end
 
     its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
-    its(:remote_template_url) { should eq(Furoshiki::Shoes::SwtApp::REMOTE_TEMPLATE_URL) }
+    its(:remote_template_url) { should eq(Furoshiki::Shoes::Configuration::REMOTE_JAR_APP_TEMPLATE_URL) }
   end
 
   context "when creating a .app" do
@@ -53,7 +53,7 @@ describe Furoshiki::Shoes::SwtApp do
       app_name = 'Sugar Clouds.app'
       @output_file = @output_dir.join app_name
       config   = Furoshiki::Shoes::Configuration.load @config_filename
-      @subject = Furoshiki::Shoes::SwtApp.new config
+      @subject = Furoshiki::JarApp.new config
       Dir.chdir @app_dir do
         @subject.package
       end
@@ -123,8 +123,8 @@ describe Furoshiki::Shoes::SwtApp do
   end
 
   describe "with an invalid configuration" do
-    let(:config) { Furoshiki::Shoes::Configuration.new }
-    subject { Furoshiki::Shoes::SwtApp.new config }
+    let(:config) { Furoshiki::Shoes::Configuration.create }
+    subject { Furoshiki::JarApp.new config }
 
     it "fails to initialize" do
       expect { subject }.to raise_error(Furoshiki::ConfigurationError)

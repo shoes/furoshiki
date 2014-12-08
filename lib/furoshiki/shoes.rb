@@ -1,6 +1,6 @@
 require 'furoshiki/shoes/configuration'
-require 'furoshiki/app'
 require 'furoshiki/jar'
+require 'furoshiki/jar_app'
 
 module Furoshiki
   module Shoes
