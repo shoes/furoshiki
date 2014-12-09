@@ -109,7 +109,7 @@ module Furoshiki
 
     private
     def warbler_extensions_class
-      @warbler_extensions_class ||= @config.fetch(:warbler_extensions_class) { Furoshiki::WarblerExtensions }
+      @warbler_extensions_class ||= @config.fetch(:warbler_extensions) { Furoshiki::WarblerExtensions }
     end
 
     def validator_class

@@ -1,3 +1,6 @@
+require 'warbler'
+require 'warbler/traits'
+
 module Warbler
   module Traits
     # Hack to stop bundler injecting itself
