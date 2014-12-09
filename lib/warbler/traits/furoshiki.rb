@@ -8,7 +8,7 @@ module Warbler
     end
 
     class Furoshiki
-      include Trait
+      include ::Warbler::Trait
       include PathmapHelper
 
       def self.detect?
