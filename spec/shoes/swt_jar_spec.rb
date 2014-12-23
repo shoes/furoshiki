@@ -32,8 +32,8 @@ describe Furoshiki::Shoes::SwtJar do
       expect(@jar_path).to eq(output_file.to_s)
     end
 
-    it "creates .jar smaller than 50MB" do
-      expect(File.size(output_file)).to be < 50 * 1024 * 1024
+    it "creates .jar smaller than 60MB" do
+      expect(File.size(output_file)).to be < 60 * 1024 * 1024
     end
 
     it "excludes directories recursively" do

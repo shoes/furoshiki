@@ -2,4 +2,7 @@ source "https://rubygems.org"
 
 gemspec
 
-gem 'shoes'
+group :test do
+  gem 'shoes-core'
+  gem 'shoes-swt'
+end

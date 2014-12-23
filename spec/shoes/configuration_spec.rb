@@ -8,7 +8,8 @@ describe Furoshiki::Shoes::Configuration do
     its(:name) { should eq('Shoes App') }
     its(:shortname) { should eq('shoesapp') }
     its(:ignore) { should eq(['pkg']) }
-    its(:gems) { should include('shoes') }
+    its(:gems) { should include('shoes-core') }
+    its(:gems) { should include('shoes-swt') }
     its(:version) { should eq('0.0.0') }
     its(:release) { should eq('Rookie') }
     its(:icons) { should be_an_instance_of(Hash) }
@@ -57,7 +58,8 @@ describe Furoshiki::Shoes::Configuration do
     its(:ignore) { should include('pkg') }
     its(:run) { should eq('bin/hello_world') }
     its(:gems) { should include('rspec') }
-    its(:gems) { should include('shoes') }
+    its(:gems) { should include('shoes-core') }
+    its(:gems) { should include('shoes-swt') }
     its(:version) { should eq('0.0.1') }
     its(:release) { should eq('Mindfully') }
     its(:icons) { should be_an_instance_of(Hash) }
