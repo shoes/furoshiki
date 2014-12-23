@@ -103,7 +103,8 @@ module Furoshiki
 
         # Ensure that we always have what we need
         [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
-        @config[:gems] << 'shoes'
+        @config[:gems] << 'shoes-core'
+        @config[:gems] << 'shoes-swt'
         @config[:working_dir] = Pathname.new(@config[:working_dir])
 
         # Define reader for each key (#shortname defined below)
