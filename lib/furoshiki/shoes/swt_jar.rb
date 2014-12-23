@@ -17,7 +17,7 @@ module Furoshiki
           @config = Warbler::Config.new do |config|
             config.jar_name = @shoes_config.shortname
             config.pathmaps.application = ['shoes-app/%p']
-            specs = @shoes_config.gems.map { |g| Gem::Specification.find_by_name(g) }
+            specs = @shoes_config.gems.map { |g| Gem::Specification.find_all_by_name(g).first }
             dependencies = specs.map { |s| s.runtime_dependencies }.flatten
             (specs + dependencies).uniq.each { |g| config.gems << g }
             ignore = @shoes_config.ignore.map do |f|
