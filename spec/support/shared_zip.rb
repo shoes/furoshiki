@@ -2,7 +2,7 @@ include ZipHelpers
 
 shared_context 'package' do
   before :all do
-    @app_dir = spec_dir.join 'shoes/test_app'
+    @app_dir = spec_dir.join 'fixtures/test_app'
     @output_dir = @app_dir.join 'pkg'
   end
 end

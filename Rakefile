@@ -1,5 +1,6 @@
 require 'bundler'
 require 'rake/clean'
+require 'rspec/core/rake_task'
 Bundler::GemHelper.install_tasks
 
 @types = %w[rb]
@@ -19,3 +20,7 @@ namespace :whitespace do
 end
 
 CLEAN.include('spec/shoes/.furoshiki', 'spec/shoes/sample_app')
+
+RSpec::Core::RakeTask.new(:spec)
+
+task :default => :spec

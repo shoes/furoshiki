@@ -1,20 +1,19 @@
 require 'spec_helper'
-require_relative 'spec_helper'
 require 'pathname'
-require 'furoshiki/shoes/swt_app'
+require 'furoshiki/jar_app'
 
 include PackageHelpers
 
-describe Furoshiki::Shoes::SwtApp do
-  include_context 'config'
-  include_context 'package'
+describe Furoshiki::JarApp do
+  include_context 'generic furoshiki config'
+  include_context 'generic furoshiki project'
 
-  let(:config) {Furoshiki::Shoes::Configuration.load @config_filename }
-  subject {Furoshiki::Shoes::SwtApp.new config}
+  let(:config) {Furoshiki::Configuration.new @custom_config }
+  subject {Furoshiki::JarApp.new config}
 
   let(:launcher) { @output_file.join('Contents/MacOS/JavaAppLauncher') }
-  let(:icon)  { @output_file.join('Contents/Resources/boots.icns') }
-  let(:jar) { @output_file.join('Contents/Java/sweet-nebulae.jar') }
+  let(:icon)  { @output_file.join('Contents/Resources/Shoes.icns') }
+  let(:jar) { @output_file.join('Contents/Java/rubyapp.jar') }
 
   # $FUROSHIKI_HOME is set in spec_helper.rb for testing purposes,
   # but should default to $HOME
@@ -33,7 +32,7 @@ describe Furoshiki::Shoes::SwtApp do
   end
 
   context "default" do
-    let(:cache_dir) { Pathname.new(SHOESSPEC_ROOT).join('.furoshiki', 'cache') }
+    let(:cache_dir) { Pathname.new(FUROSHIKI_SPEC_DIR).join('.furoshiki', 'cache') }
     its(:cache_dir) { should eq(cache_dir) }
 
     it "sets package dir to {pwd}/pkg" do
@@ -43,21 +42,25 @@ describe Furoshiki::Shoes::SwtApp do
     end
 
     its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
-    its(:remote_template_url) { should eq(Furoshiki::Shoes::SwtApp::REMOTE_TEMPLATE_URL) }
+    its(:remote_template_url) { should eq(Furoshiki::Configuration::JAR_APP_TEMPLATE_URL) }
   end
 
   context "when creating a .app" do
     before :all do
-      @output_dir.rmtree if @output_dir.exist?
+      #@output_dir.rmtree if @output_dir.exist?
       @output_dir.mkpath
-      app_name = 'Sugar Clouds.app'
+
+      app_name = 'Ruby App.app'
       @output_file = @output_dir.join app_name
-      config   = Furoshiki::Shoes::Configuration.load @config_filename
-      @subject = Furoshiki::Shoes::SwtApp.new config
+
+      # Config picks up Dir.pwd
       Dir.chdir @app_dir do
+        config = Furoshiki::Configuration.new(@custom_config)
+        @subject = Furoshiki::JarApp.new(config)
         @subject.package
       end
     end
+
     subject { @subject }
 
     its(:template_path) { should exist }
@@ -101,30 +104,34 @@ describe Furoshiki::Shoes::SwtApp do
       end
 
       it "sets identifier" do
-        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.sweet-nebulae')
+        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.rubyapp')
       end
 
       it "sets display name" do
-        expect(@plist['CFBundleDisplayName']).to eq('Sugar Clouds')
+        expect(@plist['CFBundleDisplayName']).to eq('Ruby App')
       end
 
       it "sets bundle name" do
-        expect(@plist['CFBundleName']).to eq('Sugar Clouds')
+        expect(@plist['CFBundleName']).to eq('Ruby App')
       end
 
       it "sets icon" do
-        expect(@plist['CFBundleIconFile']).to eq('boots.icns')
+        expect(@plist['CFBundleIconFile']).to eq('Shoes.icns')
       end
 
       it "sets version" do
-        expect(@plist['CFBundleVersion']).to eq('0.0.1')
+        expect(@plist['CFBundleVersion']).to eq('0.0.0')
       end
     end
   end
 
   describe "with an invalid configuration" do
-    let(:config) { Furoshiki::Shoes::Configuration.new }
-    subject { Furoshiki::Shoes::SwtApp.new config }
+    let(:config) { Furoshiki::Configuration.new }
+    subject { Furoshiki::JarApp.new config }
+
+    before do
+      allow(config).to receive(:valid?) { false }
+    end
 
     it "fails to initialize" do
       expect { subject }.to raise_error(Furoshiki::ConfigurationError)
