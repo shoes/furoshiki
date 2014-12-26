@@ -22,33 +22,9 @@ module Furoshiki
     # @param [Hash] config user options
     # @param [String] working_dir directory in which to do packaging work
     def initialize(config = {})
-      defaults = {
-        name: 'Ruby App',
-        version: '0.0.0',
-        release: 'Rookie',
-        ignore: 'pkg',
-        icons: {
-          #osx: 'path/to/default/App.icns',
-          #gtk: 'path/to/default/app.png',
-          #win32: 'path/to/default/App.ico',
-        },
-        working_dir: Dir.pwd,
-      }
-
-      # Overwrite defaults with supplied config
-      @config = merge_with_symbolized_keys(defaults, config)
-
-      # Ensure these keys have workable values
-      [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
-      @config[:working_dir] = Pathname.new(@config[:working_dir])
-
-      # Define reader for each key (except those already defined explicitly)
-      metaclass = class << self; self; end
-      @config.keys.reject {|k| self.respond_to?(k) }.each do |k|
-        metaclass.send(:define_method, k) do
-          @config[k]
-        end
-      end
+      merge_config config
+      sanitize_config
+      define_readers
     end
 
     def shortname
@@ -114,6 +90,41 @@ module Furoshiki
 
     def validator_class
       @validator_class ||= @config.fetch(:validator) { Furoshiki::Validator }
+    end
+
+    # Overwrite defaults with supplied config
+    def merge_config(config)
+      defaults = {
+        name: 'Ruby App',
+        version: '0.0.0',
+        release: 'Rookie',
+        ignore: 'pkg',
+        icons: {
+          #osx: 'path/to/default/App.icns',
+          #gtk: 'path/to/default/app.png',
+          #win32: 'path/to/default/App.ico',
+        },
+        working_dir: Dir.pwd,
+      }
+
+      @config = merge_with_symbolized_keys(defaults, config)
+    end
+
+    # Ensure these keys have workable values
+    def sanitize_config
+      [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
+      @config[:working_dir] = Pathname.new(@config[:working_dir])
+    end
+
+    # Define reader for each top-level config key (except those already defined
+    # explicitly)
+    def define_readers
+      metaclass = class << self; self; end
+      @config.keys.reject {|k| self.respond_to?(k) }.each do |k|
+        metaclass.send(:define_method, k) do
+          @config[k]
+        end
+      end
     end
   end
 end
