@@ -63,6 +63,7 @@ module Furoshiki
       remove_tmp
     end
 
+    private
     def create_tmp
       tmp.mkpath
     end
