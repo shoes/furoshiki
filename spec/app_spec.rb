@@ -42,7 +42,7 @@ describe Furoshiki::JarApp do
     end
 
     its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
-    its(:remote_template_url) { should eq(Furoshiki::Configuration::REMOTE_JAR_APP_TEMPLATE_URL) }
+    its(:remote_template_url) { should eq(Furoshiki::Configuration::JAR_APP_TEMPLATE_URL) }
   end
 
   context "when creating a .app" do

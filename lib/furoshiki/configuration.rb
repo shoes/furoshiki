@@ -15,7 +15,7 @@ module Furoshiki
   # after initialization, dump it with #to_hash, make your changes,
   # and instantiate a new object.
   class Configuration
-    REMOTE_JAR_APP_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.1.zip'
+    JAR_APP_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.1.zip'
 
     include Util
 
@@ -103,6 +103,9 @@ module Furoshiki
           #osx: 'path/to/default/App.icns',
           #gtk: 'path/to/default/app.png',
           #win32: 'path/to/default/App.ico',
+        },
+        template_urls: {
+          jar_app: JAR_APP_TEMPLATE_URL,
         },
         validator: Furoshiki::Validator,
         warbler_extensions: Furoshiki::WarblerExtensions,

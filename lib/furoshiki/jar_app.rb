@@ -135,8 +135,7 @@ module Furoshiki
     end
 
     def remote_template_url
-      #"#{downloads_url}/#{template_basename}-#{latest_template_version}#{template_extension}"
-      Configuration::REMOTE_JAR_APP_TEMPLATE_URL
+      config.template_urls.fetch(:jar_app)
     end
 
     def move_to_package_dir(path)
