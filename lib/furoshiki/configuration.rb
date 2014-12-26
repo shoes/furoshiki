@@ -85,11 +85,11 @@ module Furoshiki
 
     private
     def warbler_extensions_class
-      @warbler_extensions_class ||= @config.fetch(:warbler_extensions) { Furoshiki::WarblerExtensions }
+      @warbler_extensions_class ||= @config.fetch(:warbler_extensions)
     end
 
     def validator_class
-      @validator_class ||= @config.fetch(:validator) { Furoshiki::Validator }
+      @validator_class ||= @config.fetch(:validator)
     end
 
     # Overwrite defaults with supplied config
@@ -104,6 +104,8 @@ module Furoshiki
           #gtk: 'path/to/default/app.png',
           #win32: 'path/to/default/App.ico',
         },
+        validator: Furoshiki::Validator,
+        warbler_extensions: Furoshiki::WarblerExtensions,
         working_dir: Dir.pwd,
       }
 
