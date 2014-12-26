@@ -6,16 +6,21 @@ module Furoshiki
     # @param [#to_sym] k the key
     # @param [Object] v the value
     # @return [Hash] an updated hash
-    def deep_set_symbol_key(config, k, v)
-      if v.kind_of? Hash
-        config[k.to_sym] = v.inject({}) { |hash, (k, v)| deep_set_symbol_key(hash, k, v) }
+    def deep_set_symbol_key(hash, key, value)
+      if value.kind_of? Hash
+        hash[key.to_sym] = value.inject({}) { |inner_hash, (inner_key, inner_value)| deep_set_symbol_key(inner_hash, inner_key, inner_value) }
       else
-        config[k.to_sym] = v
+        hash[key.to_sym] = value
       end
-      config
+      hash
     end
 
-    def deep_symbolize_keys(hash, defaults = {})
+    def deep_symbolize_keys(hash)
+      merge_with_symbolized_keys({}, hash)
+    end
+
+    # Assumes that defaults already has symbolized keys
+    def merge_with_symbolized_keys(defaults, hash)
       hash.inject(defaults) { |symbolized, (k, v)| deep_set_symbol_key(symbolized, k, v) }
     end
   end

@@ -36,7 +36,7 @@ module Furoshiki
       }
 
       # Overwrite defaults with supplied config
-      @config = deep_symbolize_keys(config, defaults)
+      @config = merge_with_symbolized_keys(defaults, config)
 
       # Ensure these keys have workable values
       [:ignore, :gems].each { |k| @config[k] = Array(@config[k]) }
