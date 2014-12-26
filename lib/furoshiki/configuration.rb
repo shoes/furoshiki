@@ -99,6 +99,7 @@ module Furoshiki
         version: '0.0.0',
         release: 'Rookie',
         ignore: 'pkg',
+        # TODO: Establish these default icons and paths.
         icons: {
           #osx: 'path/to/default/App.icns',
           #gtk: 'path/to/default/app.png',
