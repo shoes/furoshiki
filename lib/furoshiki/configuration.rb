@@ -66,7 +66,12 @@ module Furoshiki
       Dir.chdir working_dir do
         warbler_config = Warbler::Config.new do |config|
           config.jar_name = self.shortname
-          specs = self.gems.map { |g| Gem::Specification.find_by_name(g) }
+          specs = self.gems.map do |gem|
+            # This is rather a hack as  Gem::Specification.find_by_name(gem)
+            # seems to break Travis.
+            # See: https://github.com/shoes/shoes4/pull/989#issuecomment-68170746
+            Gem::Specification.find_all_by_name(gem).first
+          end
           dependencies = specs.map { |s| s.runtime_dependencies }.flatten
           (specs + dependencies).uniq.each { |g| config.gems << g }
           ignore = self.ignore.map do |f|
