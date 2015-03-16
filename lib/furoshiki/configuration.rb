@@ -15,7 +15,7 @@ module Furoshiki
   # after initialization, dump it with #to_hash, make your changes,
   # and instantiate a new object.
   class Configuration
-    JAR_APP_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.1.zip'
+    JAR_APP_TEMPLATE_URL = 'https://s3.amazonaws.com/net.wasnotrice.shoes/wrappers/shoes-app-template-0.0.2.zip'
 
     include Util
 
