@@ -79,10 +79,12 @@ module Furoshiki
             children = Dir.glob("#{path}/**/*") if File.directory?(path)
             [path, *children]
           end.flatten
-          config.excludes.add FileList.new(ignore.flatten).pathmap(config.pathmaps.application.first)
           config.gem_excludes += [/^samples/, /^examples/, /^test/, /^spec/]
 
           warbler_extensions.customize(config) if warbler_extensions.respond_to? :customize
+
+          # Important this is after extensions can alter pathmaps.application
+          config.excludes.add FileList.new(ignore.flatten).pathmap(config.pathmaps.application.first)
         end
       end
       warbler_config
