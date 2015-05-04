@@ -86,7 +86,7 @@ module Furoshiki
     end
 
     def template_filename
-      "#{template_basename}#{template_extension}"
+      "#{template_basename}-#{latest_template_version}#{template_extension}"
     end
 
     def latest_template_version
