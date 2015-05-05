@@ -86,11 +86,11 @@ module Furoshiki
     end
 
     def template_filename
-      "#{template_basename}#{template_extension}"
+      "#{template_basename}-#{latest_template_version}#{template_extension}"
     end
 
     def latest_template_version
-      '0.0.1'
+      '0.0.2'
     end
 
     def download_template
@@ -158,7 +158,7 @@ module Furoshiki
     # @param [Pathname, String] jar_path the location of the JAR to inject
     def inject_jar(jar_path)
       jar_dir = tmp_app_path.join('Contents/Java')
-      jar_dir.rmtree
+      jar_dir.rmtree if File.exist?(jar_dir)
       jar_dir.mkdir
       cp Pathname.new(jar_path), jar_dir
     end

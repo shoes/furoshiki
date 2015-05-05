@@ -41,7 +41,9 @@ describe Furoshiki::JarApp do
       end
     end
 
-    its(:template_path) { should eq(cache_dir.join('shoes-app-template.zip')) }
+    it "caches current version of template" do
+      expect(subject.template_path).to eq(cache_dir.join('shoes-app-template-0.0.2.zip'))
+    end
     its(:remote_template_url) { should eq(Furoshiki::Configuration::JAR_APP_TEMPLATE_URL) }
   end
 
