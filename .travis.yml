@@ -1,6 +1,10 @@
 language: ruby
-script: "rspec"
-rvm: jruby
+script: bundle exec rspec
+rvm: 
+  - jruby-9.1.6.0
+jdk:
+  - openjdk7
+  - oraclejdk8
 notifications:
   irc: "irc.freenode.org#shoes"
   email:
