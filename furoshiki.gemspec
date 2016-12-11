@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "warbler", '~> 1.4.4'
+  s.add_dependency "warbler", '~> 2.0.4'
   s.add_dependency "plist"
   s.add_dependency 'rubyzip', '>= 1.0.0'
 
