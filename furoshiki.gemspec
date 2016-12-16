@@ -5,9 +5,9 @@ require "furoshiki/version"
 Gem::Specification.new do |s|
   s.name        = "furoshiki"
   s.version     = Furoshiki::VERSION
-  s.authors     = ["Steve Klabnik"]
-  s.email       = "steve@steveklabnik.com"
-  s.homepage    = "http://github.com/steveklabnik/furoshiki"
+  s.authors     = ["Team Shoes", "Steve Klabnik"]
+  s.email       = "shoes@lists.mvmanila.com"
+  s.homepage    = "http://github.com/shoes/furoshiki"
   s.summary     = %q{Package and distribute applications with Ruby.}
   s.description = %q{Create .app, .exe, and $LINUX_PACKAGE versions of your application, with its own embedded Ruby.}
 
