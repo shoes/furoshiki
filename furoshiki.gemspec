@@ -11,9 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Package and distribute applications with Ruby.}
   s.description = %q{Create .app, .exe, and $LINUX_PACKAGE versions of your application, with its own embedded Ruby.}
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files         = Dir["LICENSE", "README.md", "lib/**/*", "vendor/**/*"]
   s.require_paths = ["lib"]
 
   s.add_dependency "warbler", '~> 2.0.4'
