@@ -1,8 +1,8 @@
+require 'furoshiki/configuration'
 require 'furoshiki/exceptions'
 require 'furoshiki/zip/directory'
 require 'furoshiki/jar'
 require 'fileutils'
-require 'plist'
 require 'open-uri'
 require 'net/http'
 
