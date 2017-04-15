@@ -17,7 +17,7 @@ module Furoshiki
     end
 
     def remote_template_url
-      "https://github.com/jasonrclark/windows-app-templates/releases/download/v0.0.1/windows-app-template-0.0.1.zip"
+      "https://github.com/shoes/windows-app-templates/releases/download/v#{latest_template_version}/windows-app-template-#{latest_template_version}.zip"
     end
 
     def inject_jar
