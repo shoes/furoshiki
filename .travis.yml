@@ -1,7 +1,7 @@
 language: ruby
 script: bundle exec rspec
 rvm: 
-  - jruby-9.1.6.0
+  - jruby-9.1.8.0
 jdk:
   - openjdk7
   - oraclejdk8
