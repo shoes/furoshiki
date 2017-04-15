@@ -1,9 +1,10 @@
 language: ruby
 script: bundle exec rspec
+dist: trusty
 rvm: 
   - jruby-9.1.8.0
 jdk:
-  - openjdk7
+  - openjdk8
   - oraclejdk8
 notifications:
   irc: "irc.freenode.org#shoes"
