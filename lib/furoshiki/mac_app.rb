@@ -2,7 +2,7 @@ require 'furoshiki/base_app'
 require 'plist'
 
 module Furoshiki
-  class JarApp < BaseApp
+  class MacApp < BaseApp
     private
 
     def app_name
@@ -10,43 +10,20 @@ module Furoshiki
     end
 
     def template_basename
-      'shoes-app-template'
+      'mac-app-template'
     end
 
     def latest_template_version
-      '0.0.2'
+      '0.0.3'
     end
 
     def remote_template_url
-      config.template_urls.fetch(:jar_app)
+      "https://github.com/shoes/mac-app-templates/releases/download/v#{latest_template_version}/mac-app-template-#{latest_template_version}.zip"
     end
 
-    # Injects JAR into APP. The JAR should be the only item in the
-    # Contents/Java directory. If this directory contains more than one
-    # JAR, the "first" one gets run, which may not be what we want.
     def inject_jar
       jar_path = ensure_jar_exists
-
-      jar_dir = tmp_app_path.join('Contents/Java')
-      jar_dir.rmtree if File.exist?(jar_dir)
-      jar_dir.mkdir
-      cp Pathname.new(jar_path), jar_dir
-    end
-
-    # TODO: Extract to base after figuring the .app-finding move
-    def extract_template
-      raise IOError, "Couldn't find app template at #{template_path}." unless template_path.size?
-      extracted_app = nil
-
-      ::Zip::File.open(template_path) do |zip_file|
-        zip_file.each do |entry|
-          extracted_app = template_path.join(entry.name) if Pathname.new(entry.name).extname == '.app'
-          p = tmp.join(entry.name)
-          p.dirname.mkpath
-          entry.extract(p)
-        end
-      end
-      mv tmp.join(extracted_app.basename.to_s), tmp_app_path
+      cp Pathname.new(jar_path), File.join(tmp_app_path, "Contents", "Java", "app.jar")
     end
 
     def inject_files
@@ -79,7 +56,11 @@ module Furoshiki
     end
 
     def executable_path
-      app_path.join('Contents/MacOS/JavaAppLauncher')
+      app_path.join('Contents/MacOS/app')
+    end
+
+    def tmp_app_path
+      tmp.join "#{template_basename}"
     end
   end
 end
