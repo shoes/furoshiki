@@ -17,3 +17,14 @@ shared_context 'generic furoshiki project' do
   end
 end
 
+shared_context 'generic furoshiki app' do
+  before :all do
+    @app_dir = Pathname.new(__FILE__).join('../../fixtures/test_app')
+    @output_dir = @app_dir.join('pkg')
+
+    @config_filename = Pathname.new(__FILE__).join('../../fixtures/test_app/app.yaml').cleanpath
+    yaml = YAML.load(@config_filename.open)
+    @custom_config = Object.new.extend(Furoshiki::Util).deep_symbolize_keys(yaml)
+  end
+end
+
