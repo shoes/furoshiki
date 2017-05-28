@@ -1,10 +1,12 @@
 name: Sugar Clouds
-shortname: sweet-nebulae
+shortname: hello_world
 ignore:
   - pkg
   - dir_to_ignore
 run: bin/hello_world
-gems: rspec
+gems:
+  - rspec
+  - rubyzip
 version: 0.0.1
 release: Mindfully
 icons:

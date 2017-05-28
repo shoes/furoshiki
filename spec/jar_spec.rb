@@ -1,16 +1,15 @@
 require 'spec_helper'
 require_relative 'spec_helper'
 require 'pathname'
-require 'furoshiki/jar'
+require 'furoshiki'
 
 include PackageHelpers
 
 describe Furoshiki::Jar do
-  include_context 'generic furoshiki config'
-  include_context 'generic furoshiki project'
+  include_context 'generic furoshiki app'
 
   context "when creating a .jar" do
-    before :all do
+    before do
       @output_dir.rmtree if @output_dir.exist?
       @output_dir.mkpath
 
@@ -22,7 +21,7 @@ describe Furoshiki::Jar do
       end
     end
 
-    let(:jar_name) { 'rubyapp.jar' }
+    let(:jar_name) { 'hello_world.jar' }
     let(:output_file) { Pathname.new(@output_dir.join jar_name) }
     subject { @subject }
 
