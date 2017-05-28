@@ -5,12 +5,13 @@ require 'furoshiki/mac_app'
 include PackageHelpers
 
 describe Furoshiki::MacApp do
-  include_context 'generic furoshiki config'
-  include_context 'generic furoshiki project'
+  include_context 'generic furoshiki app'
 
   let(:config) { Furoshiki::Configuration.new @custom_config }
   subject { Furoshiki::MacApp.new config }
 
+  let(:launcher) { @output_file.join('Contents/MacOS/app') }
+  let(:icon)  { @output_file.join('Contents/Resources/boots.icns') }
   let(:jar) { @output_file.join('Contents', 'Java', 'app.jar') }
 
   # $FUROSHIKI_HOME is set in spec_helper.rb for testing purposes,
@@ -50,7 +51,7 @@ describe Furoshiki::MacApp do
       @output_dir.rmtree if @output_dir.exist?
       @output_dir.mkpath
 
-      app_name = 'Ruby App.app'
+      app_name = 'Sugar Clouds.app'
       @output_file = @output_dir.join app_name
 
       # Config picks up Dir.pwd
@@ -69,8 +70,59 @@ describe Furoshiki::MacApp do
       expect(@output_file).to exist
     end
 
+    it "includes launcher" do
+      expect(launcher).to exist
+    end
+
+    # Windows can't test this
+    platform_is_not :windows do
+      it "makes launcher executable" do
+        expect(launcher).to be_executable
+      end
+    end
+
+    it "deletes generic icon" do
+      expect(icon.parent.join('GenericApp.icns')).not_to exist
+    end
+
+    it "injects icon" do
+      expect(icon).to exist
+    end
+
     it "injects jar" do
       expect(jar).to exist
+    end
+
+    it "removes any extraneous jars" do
+      jar_dir_contents = @output_file.join("Contents/Java").children
+      expect(jar_dir_contents.reject { |f| f == jar }).to be_empty
+    end
+
+    describe "Info.plist" do
+      require 'plist'
+      before :all do
+        @plist = Plist.parse_xml(@output_file.join('Contents/Info.plist'))
+      end
+
+      it "sets identifier" do
+        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.sweet-nebulae')
+      end
+
+      it "sets display name" do
+        expect(@plist['CFBundleDisplayName']).to eq('Sugar Clouds')
+      end
+
+      it "sets bundle name" do
+        expect(@plist['CFBundleName']).to eq('Sugar Clouds')
+      end
+
+      it "sets icon" do
+        expect(@plist['CFBundleIconFile']).to eq('boots.icns')
+      end
+
+      it "sets version" do
+        expect(@plist['CFBundleVersion']).to eq('0.0.1')
+      end
     end
   end
 
