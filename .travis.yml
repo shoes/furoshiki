@@ -1,8 +1,8 @@
 language: ruby
 script: bundle exec rspec
 dist: trusty
-rvm: 
-  - jruby-9.1.8.0
+rvm:
+  - jruby-9.1.10.0
 jdk:
   - openjdk8
   - oraclejdk8
