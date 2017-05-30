@@ -69,7 +69,7 @@ describe Furoshiki::MacApp do
       end
 
       it "sets identifier" do
-        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.hello_world')
+        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.sweet-nebulae')
       end
 
       it "sets display name" do

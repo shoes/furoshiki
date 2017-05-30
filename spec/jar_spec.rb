@@ -21,7 +21,7 @@ describe Furoshiki::Jar do
       end
     end
 
-    let(:jar_name) { 'hello_world.jar' }
+    let(:jar_name) { 'sweet-nebulae.jar' }
     let(:output_file) { Pathname.new(@output_dir.join jar_name) }
     subject { @subject }
 
