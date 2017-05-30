@@ -2,9 +2,9 @@ require 'spec_helper'
 require 'pathname'
 require 'furoshiki/linux_app'
 
-include PackageHelpers
-
 describe Furoshiki::LinuxApp do
+  include PackageHelpers
+
   include_context 'generic furoshiki app'
 
   subject { Furoshiki::LinuxApp.new config }

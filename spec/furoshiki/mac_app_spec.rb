@@ -3,9 +3,9 @@ require 'pathname'
 require 'plist'
 require 'furoshiki/mac_app'
 
-include PackageHelpers
-
 describe Furoshiki::MacApp do
+  include PackageHelpers
+
   include_context 'generic furoshiki app'
 
   subject { Furoshiki::MacApp.new config }

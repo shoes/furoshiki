@@ -2,9 +2,9 @@ require 'spec_helper'
 require 'pathname'
 require 'furoshiki/windows_app'
 
-include PackageHelpers
-
 describe Furoshiki::WindowsApp do
+  include PackageHelpers
+
   include_context 'generic furoshiki app'
 
   subject { Furoshiki::WindowsApp.new config }

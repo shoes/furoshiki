@@ -3,9 +3,9 @@ require_relative 'spec_helper'
 require 'pathname'
 require 'furoshiki'
 
-include PackageHelpers
-
 describe Furoshiki::Jar do
+  include PackageHelpers
+
   include_context 'generic furoshiki app'
 
   context "when creating a .jar" do

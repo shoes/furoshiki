@@ -2,8 +2,6 @@ require 'spec_helper'
 require 'pathname'
 require 'furoshiki/base_app'
 
-include PackageHelpers
-
 class TestApp < Furoshiki::BaseApp
   def template_filename
     "template"
@@ -11,6 +9,8 @@ class TestApp < Furoshiki::BaseApp
 end
 
 describe Furoshiki::BaseApp do
+  include PackageHelpers
+
   include_context 'generic furoshiki app'
 
   let(:config) { Furoshiki::Configuration.new @custom_config }
