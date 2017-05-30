@@ -3,8 +3,10 @@ shortname: sweet-nebulae
 ignore:
   - pkg
   - dir_to_ignore
-run: bin/hello_world
-gems: rspec
+run: bin/sweet-nebulae
+gems:
+  - rspec
+  - rubyzip
 version: 0.0.1
 release: Mindfully
 icons:

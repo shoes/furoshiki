@@ -1,29 +1,29 @@
 require 'spec_helper'
 require 'pathname'
-require 'furoshiki/windows_app'
+require 'furoshiki/linux_app'
 
-describe Furoshiki::WindowsApp do
+describe Furoshiki::LinuxApp do
   include PackageHelpers
 
   include_context 'generic furoshiki app'
 
-  subject { Furoshiki::WindowsApp.new config }
+  subject { Furoshiki::LinuxApp.new config }
 
   let(:config) { Furoshiki::Configuration.new @custom_config }
-  let(:launcher) { @output_file.join('Sugar Clouds.bat') }
+  let(:launcher) { @output_file.join('Sugar Clouds') }
   let(:jar) { @output_file.join('app.jar') }
 
   describe "default" do
     it "caches current version of template" do
-      expect(subject.template_path).to eq(cache_dir.join('windows-app-template-0.0.1.zip'))
+      expect(subject.template_path).to eq(cache_dir.join('linux-app-template-0.0.1.zip'))
     end
 
-    its(:remote_template_url) { should match(%r{https://github.com/.*/windows-app-templates/releases/download/.*/windows-app-template.*.zip}) }
+    its(:remote_template_url) { should match(%r{https://github.com/.*/linux-app-templates/releases/download/.*/linux-app-template.*.zip}) }
   end
 
   describe "when creating an app" do
     before do
-      create_package(Furoshiki::WindowsApp, "Sugar Clouds-windows")
+      create_package(Furoshiki::LinuxApp, "Sugar Clouds-linux")
     end
 
     subject { @subject }
@@ -36,6 +36,13 @@ describe Furoshiki::WindowsApp do
 
     it "includes launcher" do
       expect(launcher).to exist
+    end
+
+    # Windows can't test this
+    platform_is_not :windows do
+      it "makes launcher executable" do
+        expect(launcher).to be_executable
+      end
     end
 
     it "injects jar" do

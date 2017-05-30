@@ -1,3 +1,6 @@
 require 'furoshiki/configuration'
 require 'furoshiki/exceptions'
 require 'furoshiki/jar'
+require 'furoshiki/mac_app'
+require 'furoshiki/windows_app'
+require 'furoshiki/linux_app'
