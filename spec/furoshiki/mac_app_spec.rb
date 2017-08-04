@@ -25,11 +25,16 @@ describe Furoshiki::MacApp do
   describe "when creating an app" do
     before do
       create_package(Furoshiki::MacApp, 'Sugar Clouds.app')
+      untar
     end
 
     subject { @subject }
 
     its(:template_path) { should exist }
+
+    it "creates the archive" do
+      expect(@subject.archive_path).to exist
+    end
 
     it "creates the app directory" do
       expect(@output_file).to exist

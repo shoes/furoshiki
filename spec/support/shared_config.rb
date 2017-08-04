@@ -27,5 +27,10 @@ shared_context 'generic furoshiki app' do
       @subject.package
     end
   end
+
+  def untar
+    # For inspection, unzip the archive where it belongs
+    `cd '#{@subject.package_dir}' && tar xf '#{@subject.archive_path.to_s}'`
+  end
 end
 

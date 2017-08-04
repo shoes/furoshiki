@@ -6,6 +6,10 @@ class TestApp < Furoshiki::BaseApp
   def template_filename
     "template"
   end
+
+  def archive_name
+    "base.tar.gaz"
+  end
 end
 
 describe Furoshiki::BaseApp do

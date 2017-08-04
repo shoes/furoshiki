@@ -8,6 +8,10 @@ module Furoshiki
       "#{config.name}-windows"
     end
 
+    def archive_name
+      "#{app_name}.zip"
+    end
+
     def template_basename
       'windows-app-template'
     end
