@@ -3,14 +3,13 @@ require 'pathname'
 require 'furoshiki/linux_app'
 
 describe Furoshiki::LinuxApp do
-  include PackageHelpers
-
   include_context 'generic furoshiki app'
 
-  subject { Furoshiki::LinuxApp.new config }
+  let(:packaging_class) { Furoshiki::LinuxApp }
 
-  let(:config)   { Furoshiki::Configuration.new @custom_config }
+  let(:archive)  { TarGzReader.new(subject.archive_path) }
   let(:app_dir)  { "Sugar Clouds-linux" }
+
   let(:launcher) { "#{app_dir}/Sugar Clouds" }
   let(:jar)      { "#{app_dir}/app.jar" }
 
@@ -23,18 +22,10 @@ describe Furoshiki::LinuxApp do
   end
 
   describe "when creating an app" do
-    before do
-      create_package(Furoshiki::LinuxApp, app_dir)
-    end
-
-    subject { @subject }
-
-    let(:archive) { TarGzReader.new(@subject.archive_path) }
-
     its(:template_path) { should exist }
 
     it "creates the archive" do
-      expect(@subject.archive_path).to exist
+      expect(subject.archive_path).to exist
     end
 
     it "includes launcher" do

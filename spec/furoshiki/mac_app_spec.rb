@@ -1,17 +1,14 @@
 require 'spec_helper'
-require 'pathname'
-require 'plist'
 require 'furoshiki/mac_app'
 
 describe Furoshiki::MacApp do
-  include PackageHelpers
-
   include_context 'generic furoshiki app'
 
-  subject { Furoshiki::MacApp.new config }
+  let(:packaging_class) { Furoshiki::MacApp }
 
-  let(:config)       { Furoshiki::Configuration.new @custom_config }
+  let(:archive)      { TarGzReader.new(subject.archive_path) }
   let(:app_dir)      { "Sugar Clouds.app" }
+
   let(:launcher)     { "#{app_dir}/Contents/MacOS/app" }
   let(:jar)          { "#{app_dir}/Contents/Java/app.jar" }
   let(:icon)         { "#{app_dir}/Contents/Resources/boots.icns" }
@@ -26,18 +23,10 @@ describe Furoshiki::MacApp do
   end
 
   describe "when creating an app" do
-    before do
-      create_package(Furoshiki::MacApp, "Sugar Clouds-mac")
-    end
-
-    subject { @subject }
-
-    let(:archive) { TarGzReader.new(@subject.archive_path) }
-
     its(:template_path) { should exist }
 
     it "creates the archive" do
-      expect(@subject.archive_path).to exist
+      expect(subject.archive_path).to exist
     end
 
     it "includes launcher" do

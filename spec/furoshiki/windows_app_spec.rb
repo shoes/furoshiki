@@ -1,16 +1,14 @@
 require 'spec_helper'
-require 'pathname'
 require 'furoshiki/windows_app'
 
 describe Furoshiki::WindowsApp do
-  include PackageHelpers
-
   include_context 'generic furoshiki app'
 
-  subject { Furoshiki::WindowsApp.new config }
+  let(:packaging_class) { Furoshiki::WindowsApp }
 
-  let(:config)   { Furoshiki::Configuration.new @custom_config }
+  let(:archive)  { ZipReader.new(subject.archive_path) }
   let(:app_dir)  { "Sugar Clouds-windows" }
+
   let(:launcher) { "#{app_dir}/Sugar Clouds.bat" }
   let(:jar)      { "#{app_dir}/app.jar" }
 
@@ -23,18 +21,10 @@ describe Furoshiki::WindowsApp do
   end
 
   describe "when creating an app" do
-    before do
-      create_package(Furoshiki::WindowsApp, app_dir)
-    end
-
-    subject { @subject }
-
-    let(:archive) { ZipReader.new(@subject.archive_path) }
-
     its(:template_path) { should exist }
 
     it "creates the archive" do
-      expect(@subject.archive_path).to exist
+      expect(subject.archive_path).to exist
     end
 
     it "includes launcher" do

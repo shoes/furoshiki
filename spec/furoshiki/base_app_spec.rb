@@ -13,11 +13,8 @@ class TestApp < Furoshiki::BaseApp
 end
 
 describe Furoshiki::BaseApp do
-  include PackageHelpers
-
   include_context 'generic furoshiki app'
 
-  let(:config) { Furoshiki::Configuration.new @custom_config }
   subject { TestApp.new config }
 
   # $FUROSHIKI_HOME is set in spec_helper.rb for testing purposes,
@@ -40,8 +37,8 @@ describe Furoshiki::BaseApp do
     its(:cache_dir) { should eq(cache_dir) }
 
     it "sets package dir to {pwd}/pkg" do
-      Dir.chdir @app_dir do
-        expect(subject.default_package_dir).to eq(@app_dir.join 'pkg')
+      Dir.chdir test_app_dir do
+        expect(subject.default_package_dir).to eq(test_app_dir.join 'pkg')
       end
     end
   end
