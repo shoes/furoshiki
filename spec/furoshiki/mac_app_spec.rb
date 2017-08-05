@@ -9,10 +9,13 @@ describe Furoshiki::MacApp do
   include_context 'generic furoshiki app'
 
   subject { Furoshiki::MacApp.new config }
-  let(:config) { Furoshiki::Configuration.new @custom_config }
-  let(:launcher) { @output_file.join('Contents/MacOS/app') }
-  let(:icon)  { @output_file.join('Contents/Resources/boots.icns') }
-  let(:jar) { @output_file.join('Contents', 'Java', 'app.jar') }
+
+  let(:config)       { Furoshiki::Configuration.new @custom_config }
+  let(:app_dir)      { "Sugar Clouds.app" }
+  let(:launcher)     { "#{app_dir}/Contents/MacOS/app" }
+  let(:jar)          { "#{app_dir}/Contents/Java/app.jar" }
+  let(:icon)         { "#{app_dir}/Contents/Resources/boots.icns" }
+  let(:generic_icon) { "#{app_dir}/Contents/Resources/GenericApp.icns" }
 
   describe "default" do
     it "caches current version of template" do
@@ -24,11 +27,12 @@ describe Furoshiki::MacApp do
 
   describe "when creating an app" do
     before do
-      create_package(Furoshiki::MacApp, 'Sugar Clouds.app')
-      untar
+      create_package(Furoshiki::MacApp, "Sugar Clouds-mac")
     end
 
     subject { @subject }
+
+    let(:archive) { TarGzReader.new(@subject.archive_path) }
 
     its(:template_path) { should exist }
 
@@ -36,61 +40,52 @@ describe Furoshiki::MacApp do
       expect(@subject.archive_path).to exist
     end
 
-    it "creates the app directory" do
-      expect(@output_file).to exist
-    end
-
     it "includes launcher" do
-      expect(launcher).to exist
+      expect(archive.include?(launcher)).to be_truthy
     end
 
-    # Windows can't test this
-    platform_is_not :windows do
-      it "makes launcher executable" do
-        expect(launcher).to be_executable
-      end
+    it "makes launcher executable" do
+      expect(archive.executable?(launcher)).to be_truthy
     end
 
     it "deletes generic icon" do
-      expect(icon.parent.join('GenericApp.icns')).not_to exist
+      expect(archive.include?(generic_icon)).to be_falsey
     end
 
     it "injects icon" do
-      expect(icon).to exist
+      expect(archive.include?(icon)).to be_truthy
     end
 
     it "injects jar" do
-      expect(jar).to exist
+      expect(archive.include?(jar)).to be_truthy
     end
 
     it "removes any extraneous jars" do
-      jar_dir_contents = @output_file.join("Contents/Java").children
-      expect(jar_dir_contents.reject { |f| f == jar }).to be_empty
+      contents = archive.match("#{app_dir}/Contents/Java/*")
+      expect(contents).to eq([jar])
     end
 
     describe "Info.plist" do
-      before do
-        @plist = Plist.parse_xml(@output_file.join('Contents/Info.plist'))
-      end
+      let(:plist) { Plist.parse_xml(archive.contents("#{app_dir}/Contents/Info.plist")) }
 
       it "sets identifier" do
-        expect(@plist['CFBundleIdentifier']).to eq('com.hackety.shoes.sweet-nebulae')
+        expect(plist['CFBundleIdentifier']).to eq('com.hackety.shoes.sweet-nebulae')
       end
 
       it "sets display name" do
-        expect(@plist['CFBundleDisplayName']).to eq('Sugar Clouds')
+        expect(plist['CFBundleDisplayName']).to eq('Sugar Clouds')
       end
 
       it "sets bundle name" do
-        expect(@plist['CFBundleName']).to eq('Sugar Clouds')
+        expect(plist['CFBundleName']).to eq('Sugar Clouds')
       end
 
       it "sets icon" do
-        expect(@plist['CFBundleIconFile']).to eq('boots.icns')
+        expect(plist['CFBundleIconFile']).to eq('boots.icns')
       end
 
       it "sets version" do
-        expect(@plist['CFBundleVersion']).to eq('0.0.1')
+        expect(plist['CFBundleVersion']).to eq('0.0.1')
       end
     end
   end

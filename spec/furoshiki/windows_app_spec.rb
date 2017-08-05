@@ -33,6 +33,10 @@ describe Furoshiki::WindowsApp do
 
     its(:template_path) { should exist }
 
+    it "creates the archive" do
+      expect(@subject.archive_path).to exist
+    end
+
     it "includes launcher" do
       expect(archive.include?(launcher)).to be_truthy
     end

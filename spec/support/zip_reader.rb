@@ -1,6 +1,6 @@
 class ZipReader
   def initialize(file)
-   @zip = ::Zip::File.open(file)
+    @zip = ::Zip::File.open(file)
   end
 
   def include?(pattern)
