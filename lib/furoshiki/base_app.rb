@@ -1,6 +1,5 @@
 require 'furoshiki/configuration'
 require 'furoshiki/exceptions'
-require 'furoshiki/zip/directory'
 require 'furoshiki/jar'
 require 'fileutils'
 require 'open-uri'

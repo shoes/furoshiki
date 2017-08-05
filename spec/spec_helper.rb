@@ -62,24 +62,5 @@ module PackageHelpers
   end
 end
 
-module ZipHelpers
-  include PackageHelpers
-  # dir = Pathname.new('spec/support/zip')
-  # add_trailing_slash(dir) #=> '/path/to/spec/support/zip/'
-  def add_trailing_slash(dir)
-    dir.to_s + "/"
-  end
-
-  def relative_input_paths(from_dir)
-    Pathname.glob(input_dir + "**/*").map do |p|
-      directory = true if p.directory?
-      relative_path = p.relative_path_from(from_dir).to_s
-      relative_path = add_trailing_slash(relative_path) if directory
-      relative_path
-    end
-  end
-end
-
 spec_root = File.dirname(__FILE__)
 Dir["#{spec_root}/support/**/*.rb"].each { |f| require f }
-
