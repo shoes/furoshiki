@@ -105,6 +105,10 @@ module Furoshiki
       tmp.join app_name
     end
 
+    def tmp_files
+      Dir[tmp_app_path.join("**/*")]
+    end
+
     def app_path
       package_dir.join app_name
     end
@@ -201,7 +205,7 @@ module Furoshiki
       File.open(dest, "wb") do |file|
         Zlib::GzipWriter.wrap(file) do |gz|
           Gem::Package::TarWriter.new(gz) do |tar|
-            Dir[source_path.join("**/*")].map do |source_item|
+            tmp_files.each do |source_item|
               dest_item = source_item.sub(source_path.to_s, app_name)
               if File.directory?(source_item)
                 tar.mkdir(dest_item, 0755)

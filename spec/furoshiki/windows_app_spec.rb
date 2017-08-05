@@ -24,6 +24,7 @@ describe Furoshiki::WindowsApp do
   describe "when creating an app" do
     before do
       create_package(Furoshiki::WindowsApp, "Sugar Clouds-windows")
+      unzip
     end
 
     subject { @subject }
