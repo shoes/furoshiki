@@ -3,9 +3,9 @@ class ZipReader
    @zip = ::Zip::File.open(file)
   end
 
-  def includes?(pattern)
+  def include?(pattern)
     @zip.any? do |file|
-      File.fnmatch(pattern, file.name)
+      File.fnmatch(pattern.to_s, file.name)
     end
   end
 end

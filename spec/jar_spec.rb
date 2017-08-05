@@ -41,11 +41,11 @@ describe Furoshiki::Jar do
       let (:jar) { ZipReader.new(output_file) }
 
       it "includes a specified gem" do
-        expect(jar.includes?("gems/rubyzip*")).to be_truthy
+        expect(jar.include?("gems/rubyzip*")).to be_truthy
       end
 
       it "does not include a non-specified gem" do
-        expect(jar.includes?("gems/warbler*")).to be_falsey
+        expect(jar.include?("gems/warbler*")).to be_falsey
       end
     end
 
