@@ -1,3 +1,7 @@
+# 0.6.0
+
+* Output archives instead of loose files [#33]
+
 # 0.5.0
 
 * Support Linux apps [#29]
