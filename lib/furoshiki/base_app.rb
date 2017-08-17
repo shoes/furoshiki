@@ -200,23 +200,11 @@ module Furoshiki
     end
 
     def create_archive(source_path)
-      dest = package_dir.join(archive_name)
-      File.open(dest, "wb") do |file|
-        Zlib::GzipWriter.wrap(file) do |gz|
-          Gem::Package::TarWriter.new(gz) do |tar|
-            tmp_files.each do |source_item|
-              dest_item = source_item.sub(source_path.to_s, app_name)
-              if File.directory?(source_item)
-                tar.mkdir(dest_item, 0755)
-              else
-                contents = File.binread(source_item)
-                mode = dest_mode(dest_item)
-                tar.add_file_simple(dest_item, mode, contents.length) do |dest|
-                  dest.write(contents)
-                end
-              end
-            end
-          end
+      destination = package_dir.join(archive_name)
+      open_archive(destination) do |tar|
+        tmp_files.each do |source_item|
+          destination_item = source_item.sub(source_path.to_s, app_name)
+          write_item_to_archive(source_item, destination_item, tar)
         end
       end
     end
@@ -228,11 +216,33 @@ module Furoshiki
       path
     end
 
-    def dest_mode(dest_item)
-      if executable_path.to_s.end_with?(dest_item)
+    def destination_mode(destination)
+      if executable_path.to_s.end_with?(destination)
         0755
       else
         0644
+      end
+    end
+
+    def open_archive(destination)
+      File.open(destination, "wb") do |file|
+        Zlib::GzipWriter.wrap(file) do |gz|
+          Gem::Package::TarWriter.new(gz) do |tar|
+            yield tar
+          end
+        end
+      end
+    end
+
+    def write_item_to_archive(source_item, destination_item, tar)
+      if File.directory?(source_item)
+        tar.mkdir(destination_item, 0755)
+      else
+        contents = File.binread(source_item)
+        mode = destination_mode(destination_item)
+        tar.add_file_simple(destination_item, mode, contents.length) do |destination|
+          destination.write(contents)
+        end
       end
     end
   end
