@@ -9,6 +9,10 @@ module Furoshiki
       "#{config.name}.app"
     end
 
+    def archive_name
+      "#{config.name}-mac.tar.gz"
+    end
+
     def template_basename
       'mac-app-template'
     end
@@ -49,10 +53,6 @@ module Furoshiki
         resources_dir = tmp_app_path.join('Contents/Resources')
         cp icon_path, resources_dir.join(icon_path.basename)
       end
-    end
-
-    def after_moved
-      executable_path.chmod 0755
     end
 
     def executable_path

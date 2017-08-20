@@ -1,5 +1,4 @@
 require 'furoshiki/base_app'
-require 'plist'
 
 module Furoshiki
   class LinuxApp < BaseApp
@@ -7,6 +6,10 @@ module Furoshiki
 
     def app_name
       "#{config.name}-linux"
+    end
+
+    def archive_name
+      "#{app_name}.tar.gz"
     end
 
     def template_basename
@@ -28,10 +31,6 @@ module Furoshiki
 
     def after_built
       mv File.join(tmp_app_path, "app"), File.join(tmp_app_path, config.name)
-    end
-
-    def after_moved
-      executable_path.chmod 0755
     end
 
     def executable_path

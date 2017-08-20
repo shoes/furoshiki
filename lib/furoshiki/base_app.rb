@@ -1,10 +1,11 @@
 require 'furoshiki/configuration'
 require 'furoshiki/exceptions'
-require 'furoshiki/zip/directory'
 require 'furoshiki/jar'
 require 'fileutils'
 require 'open-uri'
 require 'net/http'
+require 'rubygems/package'
+require 'rubygems/package/tar_writer'
 
 module Furoshiki
   class BaseApp
@@ -24,6 +25,7 @@ module Furoshiki
       @package_dir = default_package_dir
       @default_template_path = cache_dir.join(template_filename)
       @template_path = default_template_path
+      @archive_path = @package_dir.join(archive_name)
       @tmp = @package_dir.join('tmp')
     end
 
@@ -38,8 +40,7 @@ module Furoshiki
       inject_jar
       after_built
 
-      move_to_package_dir tmp_app_path
-      after_moved
+      create_archive tmp_app_path
     ensure
       remove_tmp
     end
@@ -52,6 +53,9 @@ module Furoshiki
 
     # @return [Pathname] default path to app template
     attr_reader :default_template_path
+
+    # @return [Pathname] path to resulting archive file
+    attr_accessor :archive_path
 
     # @return [Pathname] path to app template
     attr_accessor :template_path
@@ -69,6 +73,10 @@ module Furoshiki
 
     # Locations and names
     def app_name
+      raise NotImplementedError
+    end
+
+    def archive_name
       raise NotImplementedError
     end
 
@@ -96,12 +104,21 @@ module Furoshiki
       tmp.join app_name
     end
 
+    def tmp_files
+      Dir[tmp_app_path.join("**/*")]
+    end
+
     def app_path
       package_dir.join app_name
     end
 
     def working_dir
       config.working_dir
+    end
+
+    def executable_path
+      # Expected to be overridden on *nix systems
+      ""
     end
 
     # Temp helpers
@@ -182,13 +199,14 @@ module Furoshiki
     def after_built
     end
 
-    def after_moved
-    end
-
-    def move_to_package_dir(path)
-      dest = package_dir.join(app_name)
-      dest.rmtree if dest.exist?
-      mv path.to_s, dest
+    def create_archive(source_path)
+      destination = package_dir.join(archive_name)
+      open_archive(destination) do |tar|
+        tmp_files.each do |source_item|
+          destination_item = source_item.sub(source_path.to_s, app_name)
+          write_item_to_archive(source_item, destination_item, tar)
+        end
+      end
     end
 
     def ensure_jar_exists
@@ -196,6 +214,36 @@ module Furoshiki
       path = tmp.join(jar.filename)
       jar.package(tmp) unless File.exist?(path)
       path
+    end
+
+    def destination_mode(destination)
+      if executable_path.to_s.end_with?(destination)
+        0755
+      else
+        0644
+      end
+    end
+
+    def open_archive(destination)
+      File.open(destination, "wb") do |file|
+        Zlib::GzipWriter.wrap(file) do |gz|
+          Gem::Package::TarWriter.new(gz) do |tar|
+            yield tar
+          end
+        end
+      end
+    end
+
+    def write_item_to_archive(source_item, destination_item, tar)
+      if File.directory?(source_item)
+        tar.mkdir(destination_item, 0755)
+      else
+        contents = File.binread(source_item)
+        mode = destination_mode(destination_item)
+        tar.add_file_simple(destination_item, mode, contents.length) do |destination|
+          destination.write(contents)
+        end
+      end
     end
   end
 end

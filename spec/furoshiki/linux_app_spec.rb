@@ -3,15 +3,15 @@ require 'pathname'
 require 'furoshiki/linux_app'
 
 describe Furoshiki::LinuxApp do
-  include PackageHelpers
-
   include_context 'generic furoshiki app'
 
-  subject { Furoshiki::LinuxApp.new config }
+  let(:packaging_class) { Furoshiki::LinuxApp }
 
-  let(:config) { Furoshiki::Configuration.new @custom_config }
-  let(:launcher) { @output_file.join('Sugar Clouds') }
-  let(:jar) { @output_file.join('app.jar') }
+  let(:archive)  { TarGzReader.new(subject.archive_path) }
+  let(:app_dir)  { "Sugar Clouds-linux" }
+
+  let(:launcher) { "#{app_dir}/Sugar Clouds" }
+  let(:jar)      { "#{app_dir}/app.jar" }
 
   describe "default" do
     it "caches current version of template" do
@@ -22,31 +22,22 @@ describe Furoshiki::LinuxApp do
   end
 
   describe "when creating an app" do
-    before do
-      create_package(Furoshiki::LinuxApp, "Sugar Clouds-linux")
-    end
-
-    subject { @subject }
-
     its(:template_path) { should exist }
 
-    it "creates the app directory" do
-      expect(@output_file).to exist
+    it "creates the archive" do
+      expect(subject.archive_path).to exist
     end
 
     it "includes launcher" do
-      expect(launcher).to exist
+      expect(archive.include?(launcher)).to be_truthy
     end
 
-    # Windows can't test this
-    platform_is_not :windows do
-      it "makes launcher executable" do
-        expect(launcher).to be_executable
-      end
+    it "makes launcher executable" do
+      expect(archive.executable?(launcher)).to be_truthy
     end
 
     it "injects jar" do
-      expect(jar).to exist
+      expect(archive.include?(jar)).to be_truthy
     end
   end
 end

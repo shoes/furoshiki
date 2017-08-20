@@ -1,4 +1,5 @@
 require 'furoshiki/base_app'
+require 'zip'
 
 module Furoshiki
   class WindowsApp < BaseApp
@@ -6,6 +7,10 @@ module Furoshiki
 
     def app_name
       "#{config.name}-windows"
+    end
+
+    def archive_name
+      "#{app_name}.zip"
     end
 
     def template_basename
@@ -31,6 +36,17 @@ module Furoshiki
 
     def tmp_app_path
       tmp.join "#{template_basename}"
+    end
+
+    def create_archive(source_path)
+      dest = package_dir.join(archive_name)
+      rm_f dest
+      ::Zip::File.open(dest, ::Zip::File::CREATE) do |zipfile|
+        tmp_files.each do |source_item|
+          dest_item = source_item.sub(source_path.to_s, app_name)
+          zipfile.add(dest_item, source_item)
+        end
+      end
     end
   end
 end
