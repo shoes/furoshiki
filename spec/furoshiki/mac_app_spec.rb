@@ -16,7 +16,7 @@ describe Furoshiki::MacApp do
 
   describe "default" do
     it "caches current version of template" do
-      expect(subject.template_path).to eq(cache_dir.join('mac-app-template-0.0.3.zip'))
+      expect(subject.template_path).to eq(cache_dir.join('mac-app-template-0.0.4.zip'))
     end
 
     its(:remote_template_url) { should match(%r{https://github.com/.*/mac-app-templates/releases/download/.*/mac-app-template.*.zip}) }
