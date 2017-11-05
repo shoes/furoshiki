@@ -18,7 +18,7 @@ module Furoshiki
     end
 
     def latest_template_version
-      '0.0.3'
+      '0.0.4'
     end
 
     def remote_template_url

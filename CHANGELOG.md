@@ -1,3 +1,7 @@
+# 0.6.1
+
+* New icon for Mac app template [#36]
+
 # 0.6.0
 
 * Output archives instead of loose files [#33]
